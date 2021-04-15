@@ -1,15 +1,19 @@
 <template>
   <div id="app">
-    <h2>Hello</h2>
+    <router-view/>
   </div>
 </template>
 
 <script>
+
+export default {};
+
 </script>
 <style lang="scss">
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  color: #2c3e50;
+  width: 100vw;
+  height: 100vh;
+  background-color: #fafafa;
 }
 
 
