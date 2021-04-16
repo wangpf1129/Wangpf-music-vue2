@@ -1,7 +1,9 @@
 <template>
   <div>
     <home-header title="Wangpf Music" @navClick="toPath"/>
-    <router-view/>
+    <keep-alive>
+      <router-view/>
+    </keep-alive>
   </div>
 </template>
 

@@ -1,15 +1,17 @@
 <template>
   <div class="singers-wrapper">
     <singers-category :category="singersCategory"/>
+    <singers-list/>
   </div>
 </template>
 
 <script>
 import SingersCategory from '@/components/Home/Singers/SingersCategory';
+import SingersList from '@/components/Home/Singers/SingersList';
 
 export default {
   name: 'Singers',
-  components: {SingersCategory},
+  components: {SingersCategory, SingersList},
   data() {
     return {
       singersCategory: {}
