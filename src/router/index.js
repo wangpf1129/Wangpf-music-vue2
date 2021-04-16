@@ -8,6 +8,7 @@ import Recommend from '@/views/Recommend';
 import Rank from '@/views/Rank';
 import Singers from '@/views/Singers';
 import Search from '@/views/Search';
+import SingerDetail from '@/components/SingerDetail/SingerDetail';
 
 const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
@@ -21,7 +22,7 @@ const routes = [
     children: [
       {path: 'recommend', component: Recommend},
       {path: 'rank', component: Rank},
-      {path: 'singers', component: Singers},
+      {path: 'singers', component: Singers, children: [{path: ':id', component: SingerDetail}]},
       {path: 'search', component: Search},
     ]
   },

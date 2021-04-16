@@ -5,6 +5,7 @@
         class="singers-item"
         v-for="singer of list"
         :key="singer.singer_id"
+        @click="selectSinger(singer)"
       >
         <img :src="singer.singer_pic" alt="">
         <span>{{ singer.singer_name }}</span>
@@ -22,6 +23,11 @@ export default {
       required: true
     }
   },
+  methods:{
+    selectSinger(singer){
+      this.$emit('select-singer',singer)
+    }
+  }
 };
 </script>
 

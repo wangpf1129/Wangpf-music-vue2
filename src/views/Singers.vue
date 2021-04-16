@@ -3,9 +3,10 @@
     <scroll :list="singersList" :top="100" ref="scroll">
       <div class="scroll-wrapper">
         <singers-category :category="singersCategory" @category-click="fetchSingersList"/>
-        <singers-list :list="singersList"/>
+        <singers-list :list="singersList" @select-singer="selectSinger"/>
       </div>
     </scroll>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -38,6 +39,11 @@ export default {
       const res = await this.$http.get('/singer/list', {params});
       this.singersList = res.data.data.list;
     },
+    selectSinger(singer) {
+      this.$router.push({
+        path: `/singers/${singer.singer_mid}`
+      });
+    }
   },
   watch: {
     singersCategory() {
