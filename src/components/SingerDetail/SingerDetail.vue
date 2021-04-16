@@ -12,10 +12,14 @@ import {mapGetters} from 'vuex';
 export default {
   name: 'SingerDetail',
   methods: {
-    ...mapGetters(['singer'])
+    ...mapGetters(['singer']),
+    async fetchSingerSongs() {
+      const res = await this.$http.get('/singer/songs', {params: {singermid: this.singer().singer_mid,}});
+      console.log(res.data.data);
+    }
   },
   created() {
-    console.log(this.singer());
+    this.fetchSingerSongs();
   }
 };
 </script>
