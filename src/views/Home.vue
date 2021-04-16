@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="wrapper">
     <home-header title="Wangpf Music" @navClick="toPath"/>
     <router-view/>
   </div>
@@ -21,5 +21,6 @@ export default {
 </script>
 
 <style scoped>
-
+.wrapper{
+}
 </style>
