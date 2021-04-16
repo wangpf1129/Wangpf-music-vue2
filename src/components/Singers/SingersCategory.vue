@@ -51,6 +51,7 @@ export default {
 <style lang="scss" scoped>
 .singers-category-wrapper {
   .category {
+    margin: 0 6px;
     display: flex;
     flex-wrap: wrap;
     color: #afafaf;

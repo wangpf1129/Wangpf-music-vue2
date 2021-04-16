@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import SingersCategory from '@/components/Home/Singers/SingersCategory';
-import SingersList from '@/components/Home/Singers/SingersList';
+import SingersCategory from '@/components/Singers/SingersCategory';
+import SingersList from '@/components/Singers/SingersList';
 import Scroll from '@/common/Scroll';
 
 

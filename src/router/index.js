@@ -14,7 +14,7 @@ VueRouter.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err);
 };
 const routes = [
-  { path: '/', redirect: '/recommend' },
+  {path: '/', redirect: '/recommend'},
   {
     path: '/',
     component: Home,

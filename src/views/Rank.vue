@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import RankItem from '@/components/Home/Rank/RankItem';
+import RankItem from '@/components/Rank/RankItem';
 import Scroll from '@/common/Scroll';
 
 export default {
