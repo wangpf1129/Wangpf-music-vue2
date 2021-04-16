@@ -2,7 +2,7 @@
   <div class="recommended-wrapper">
     <scroll :top="98" :list="recommendedSong" ref="scroll">
       <div class="scroll-wrapper">
-        <my-swiper :swiper-list="swiperList" @imgLoad="scrollRefresh"/>
+        <my-swiper :swiper-list="swiperList"/>
         <song-sheet-list :recommended-song="recommendedSong"/>
       </div>
     </scroll>
@@ -37,8 +37,12 @@ export default {
         title: item.username
       }));
     },
-    scrollRefresh() {
-      this.$refs.scroll.refresh();
+  },
+  watch: {
+    swiperList() {
+      this.$nextTick(() => {
+        this.$refs.scroll.refresh();
+      });
     }
   },
   created() {

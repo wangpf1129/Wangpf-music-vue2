@@ -1,20 +1,27 @@
 <template>
   <div class="singers-wrapper">
-    <singers-category :category="singersCategory"/>
-    <singers-list/>
+    <scroll :list="singersList" :top="100" ref="scroll">
+      <div class="scroll-wrapper">
+        <singers-category :category="singersCategory"/>
+        <singers-list :list="singersList"/>
+      </div>
+    </scroll>
   </div>
 </template>
 
 <script>
 import SingersCategory from '@/components/Home/Singers/SingersCategory';
 import SingersList from '@/components/Home/Singers/SingersList';
+import Scroll from '@/common/Scroll';
+
 
 export default {
   name: 'Singers',
-  components: {SingersCategory, SingersList},
+  components: {SingersCategory, SingersList, Scroll},
   data() {
     return {
-      singersCategory: {}
+      singersCategory: {},
+      singersList: []
     };
   },
   methods: {
@@ -25,10 +32,22 @@ export default {
         area: category.area,
         genre: category.genre
       };
+    },
+    async fetchSingersList() {
+      const res = await this.$http.get('/singer/list');
+      this.singersList = res.data.data.list;
+    },
+  },
+  watch: {
+    singersCategory() {
+      this.$nextTick(() => {
+        this.$refs.scroll.refresh();
+      });
     }
   },
   created() {
     this.fetchSingersCategory();
+    this.fetchSingersList();
   }
 };
 </script>

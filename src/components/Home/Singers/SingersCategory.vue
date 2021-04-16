@@ -1,11 +1,11 @@
 <template>
   <div class="singers-category-wrapper">
-    <div v-for="(value,key) of category" :key="key">
+    <div v-for="(value,key) of category" :key="key" @load="categoryLoad">
       <ul class="category">
         <li v-for="(item,index) of value"
             :key="item.id"
             :class="['category-item',{'category-active':activeIndex[key]===index}]"
-            @click="activeIndex[key] = index"
+            @click="categoryClick(key,index)"
         >
           {{ item.name }}
         </li>
@@ -31,6 +31,19 @@ export default {
         area: 0
       }
     };
+  },
+  methods: {
+    categoryLoad() {
+      this.$emit('categoryLoad');
+    },
+    categoryClick(key, index) {
+      this.activeIndex[key] = index;
+      const params = {};
+      for (let k in this.activeIndex) {
+        params[k] = this.category[k][this.activeIndex[k]].id;
+      }
+      this.$emit('category-click', params);
+    }
   }
 };
 </script>
