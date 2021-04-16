@@ -2,7 +2,7 @@
   <div class="swiper-wrapper">
     <a-carousel autoplay>
       <div class="swiper-img" v-for="item of swiperList" :key="item.id">
-        <img :src="item.imgUrl" alt="">
+        <img :src="item.imgUrl" alt="" @load="imgLoad">
       </div>
     </a-carousel>
   </div>
@@ -16,6 +16,11 @@ export default {
       type: Array,
       required: true
     }
+  },
+  methods: {
+    imgLoad() {
+      this.$emit('imgLoad');
+    }
   }
 };
 </script>
@@ -24,7 +29,8 @@ export default {
 .swiper-wrapper {
   .ant-carousel .swiper-img {
     width: 100vw;
-    img{
+    
+    img {
       width: 96%;
       margin: 0 auto;
     }

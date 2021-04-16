@@ -13,16 +13,30 @@ export default {
     top: {
       type: Number,
       default: 0
+    },
+    list: {
+      type: Array,
+      required: true
     }
   },
   methods: {
     initScroll() {
-      this.$refs.wrapper.style.top = this.top + 'px'
+      this.$refs.wrapper.style.top = this.top + 'px';
       this.scroll = new BScroll(this.$refs.wrapper);
+    },
+    refresh() {
+      this.scroll && this.scroll.refresh();
     }
   },
   mounted() {
     this.initScroll();
+  },
+  watch: {
+    list() {
+      this.$nextTick(() => {
+        this.refresh();
+      });
+    }
   }
 };
 </script>
@@ -30,9 +44,10 @@ export default {
 <style lang="scss">
 .wrapper {
   position: absolute;
+  overflow: hidden;
+  top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  top: 0;
 }
 </style>

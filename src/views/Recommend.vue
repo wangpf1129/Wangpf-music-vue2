@@ -1,8 +1,8 @@
 <template>
-  <div class="wrapper">
-    <scroll :top="98">
-      <div class="scroll-warpper">
-        <my-swiper :swiper-list="swiperList"/>
+  <div class="recommended-wrapper">
+    <scroll :top="98" :list="recommendedSong" ref="scroll">
+      <div class="scroll-wrapper">
+        <my-swiper :swiper-list="swiperList" @imgLoad="scrollRefresh"/>
         <song-sheet-list :recommended-song="recommendedSong"/>
       </div>
     </scroll>
@@ -36,6 +36,9 @@ export default {
         info: item.title,
         title: item.username
       }));
+    },
+    scrollRefresh() {
+      this.$refs.scroll.refresh();
     }
   },
   created() {
@@ -46,6 +49,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.wrapper {
+.recommended-wrapper {
+
 }
 </style>
