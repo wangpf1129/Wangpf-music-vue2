@@ -2,7 +2,7 @@
   <div class="singers-wrapper">
     <scroll :list="singersList" :top="100" ref="scroll">
       <div class="scroll-wrapper">
-        <singers-category :category="singersCategory"/>
+        <singers-category :category="singersCategory" @category-click="fetchSingersList"/>
         <singers-list :list="singersList"/>
       </div>
     </scroll>
@@ -33,8 +33,9 @@ export default {
         genre: category.genre
       };
     },
-    async fetchSingersList() {
-      const res = await this.$http.get('/singer/list');
+    async fetchSingersList(params) {
+      this.singersList = [];
+      const res = await this.$http.get('/singer/list', {params});
       this.singersList = res.data.data.list;
     },
   },

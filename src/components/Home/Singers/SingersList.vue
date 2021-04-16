@@ -30,6 +30,7 @@ export default {
   .singers-list {
     display: flex;
     flex-direction: column;
+    flex-wrap: nowrap;
     margin-left: 30px;
     padding: 16px 0;
     
