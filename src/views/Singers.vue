@@ -14,6 +14,7 @@
 import SingersCategory from '@/components/Singers/SingersCategory';
 import SingersList from '@/components/Singers/SingersList';
 import Scroll from '@/common/Scroll';
+import {mapMutations} from 'vuex';
 
 
 export default {
@@ -43,7 +44,9 @@ export default {
       this.$router.push({
         path: `/singers/${singer.singer_mid}`
       });
-    }
+      this.setSinger(singer);
+    },
+    ...mapMutations({setSinger: 'SET_SINGER'}),
   },
   watch: {
     singersCategory() {
