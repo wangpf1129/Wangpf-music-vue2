@@ -7,7 +7,7 @@
       </div>
       <img :src="bgUrl" alt="">
     </div>
-    <scroll :list="songsList" ref="scroll" :top="300">
+    <scroll :list="songsList" ref="scroll" :top="230">
       <songs-list :songs-list="songsList"></songs-list>
     </scroll>
   </div>
@@ -66,7 +66,7 @@ export default {
     object-fit: cover;
   
     > img {
-      width: 68%;
+      width: 48%;
       border-radius: 10%;
       box-shadow: 6px 9px 17px rgba(0, 0, 0, .17);
     }

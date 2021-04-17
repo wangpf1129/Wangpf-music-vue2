@@ -1,9 +1,9 @@
 <template>
   <div class="rank-item-wrapper">
-    <div class="rank-item" v-for="rank of rankList" :key="rank.topId">
+    <div class="rank-item" v-for="rank of rankList" :key="rank.topId" @click="selectRankSheet(rank)">
       <img class="rank-img" :src="rank.picUrl" alt="">
       <ul>
-        <li v-for="(song,index) of rank.song" :key="index">
+        <li v-for="(song,index) of rank.song" :key="index" >
           {{ song.rank }}. {{ song.title }}
         </li>
       </ul>
@@ -18,6 +18,11 @@ export default {
     rankList: {
       type: Array,
       required: true
+    }
+  },
+  methods:{
+    selectRankSheet(rank){
+      this.$emit('select-rank-sheet',rank)
     }
   }
 };

@@ -2,9 +2,10 @@
   <div class="rank-wrapper">
     <scroll :list="rankList" :top="100">
       <div class="scroll-wrapper">
-        <rank-item :rank-list="rankList"/>
+        <rank-item :rank-list="rankList" @select-rank-sheet="selectRankSheet"/>
       </div>
     </scroll>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -24,7 +25,11 @@ export default {
     async fetchSongsRank() {
       const res = await this.$http.get('/top/category', {params: {showDetail: 1}});
       this.rankList = res.data.data.reduce((newValue, item) => newValue.concat(item.list), []);
-    }
+    },
+    selectRankSheet(rank) {
+      console.log(rank);
+    },
+    
   },
   created() {
     this.fetchSongsRank();
