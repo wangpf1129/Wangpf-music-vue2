@@ -12,6 +12,7 @@
 <script>
 import RankItem from '@/components/Rank/RankItem';
 import Scroll from '@/common/Scroll';
+import {mapMutations} from 'vuex';
 
 export default {
   name: 'Rank',
@@ -27,9 +28,14 @@ export default {
       this.rankList = res.data.data.reduce((newValue, item) => newValue.concat(item.list), []);
     },
     selectRankSheet(rank) {
-      console.log(rank);
+      this.$router.push({
+        path: `/rank/${rank.topId}`
+      });
+      this.setRankSheet(rank);
     },
-    
+    ...mapMutations({
+      setRankSheet: 'SET_RANK_SHEET'
+    })
   },
   created() {
     this.fetchSongsRank();
