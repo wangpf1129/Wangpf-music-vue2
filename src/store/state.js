@@ -1,5 +1,6 @@
 const state = {
-  singer: {}
+  singer: {},
+  songSheet:{},
 };
 
 export default state;

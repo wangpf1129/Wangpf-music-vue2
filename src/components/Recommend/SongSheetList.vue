@@ -5,6 +5,7 @@
         class="song-sheet-item"
         v-for="item of  recommendedSong"
         :key="item.id"
+        @click="selectSongSheet(item)"
       >
         <img :src="item.imgUrl" alt="">
         <div class="song-sheet-info">
@@ -26,6 +27,11 @@ export default {
       required: true
     }
   },
+  methods:{
+    selectSongSheet(songSheet){
+      this.$emit('select-song-sheet',songSheet)
+    }
+  }
 };
 </script>
 

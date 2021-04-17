@@ -5,7 +5,6 @@
         <span class="icon-back" @click="back">back</span>
         <span class="title">{{ title }}</span>
       </div>
-      <div class="filter">随机播放</div>
     </div>
     <scroll :list="songsList" ref="scroll" :top="263">
       <songs-list :songs-list="songsList"></songs-list>
@@ -39,11 +38,12 @@ export default {
       return `background-image:url(${this.bgUrl})`;
     }
   },
-  methods:{
-    back(){
-      this.$router.back()
+  methods: {
+    back() {
+      this.$router.back();
     }
   }
+  
 };
 </script>
 
@@ -93,13 +93,7 @@ export default {
       }
     }
     
-    > .filter {
-      position: absolute;
-      top: 80%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 16px;
-    }
+    
   }
 }
 </style>

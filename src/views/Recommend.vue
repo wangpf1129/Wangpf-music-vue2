@@ -3,9 +3,10 @@
     <scroll :top="98" :list="recommendedSong" ref="scroll">
       <div class="scroll-wrapper">
         <my-swiper :swiper-list="swiperList" @img-load="scrollRefresh"/>
-        <song-sheet-list :recommended-song="recommendedSong"/>
+        <song-sheet-list :recommended-song="recommendedSong" @select-song-sheet="selectSongSheet"/>
       </div>
     </scroll>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -13,6 +14,7 @@
 import MySwiper from '@/components/Recommend/MySwiper';
 import SongSheetList from '@/components/Recommend/SongSheetList';
 import Scroll from '@/common/Scroll';
+import {mapMutations} from 'vuex';
 
 export default {
   name: 'Recommend',
@@ -37,9 +39,16 @@ export default {
         title: item.username
       }));
     },
+    selectSongSheet(songSheet) {
+      this.$router.push({
+        path: `/recommend/${songSheet.id}`
+      });
+      this.setSongSheet(songSheet);
+    },
     scrollRefresh() {
       this.$refs.scroll.refresh();
-    }
+    },
+    ...mapMutations({setSongSheet: 'SET_SONG_SHEET'})
   },
   created() {
     this.fetchSwiperList();
