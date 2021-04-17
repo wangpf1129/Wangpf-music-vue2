@@ -28,7 +28,6 @@ export default {
     ...mapGetters(['singer']),
     async fetchSingerSongs() {
       const res = await this.$http.get('/singer/songs', {params: {singermid: this.singer().singer_mid,}});
-      console.log(res.data.data.list);
       this.songsList = res.data.data.list;
     }
   },
