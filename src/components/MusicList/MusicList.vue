@@ -1,19 +1,20 @@
 <template>
   <div class="music-list-wrapper">
-    <div class="bg-image" :style="bgStyle">
+    <div class="bg-image">
       <div class="music-title">
         <span class="icon-back" @click="back">back</span>
         <span class="title">{{ title }}</span>
       </div>
+      <img :src="bgUrl" alt="">
     </div>
-    <scroll :list="songsList" ref="scroll" :top="263">
+    <scroll :list="songsList" ref="scroll" :top="300">
       <songs-list :songs-list="songsList"></songs-list>
     </scroll>
   </div>
 </template>
 
 <script>
-import SongsList from '@/components/SongsList/SongsList';
+import SongsList from '@/components/MusicList/SongsList';
 import Scroll from '@/common/Scroll';
 
 export default {
@@ -59,18 +60,21 @@ export default {
   
   .bg-image {
     position: relative;
-    width: 100%;
-    height: 0;
-    padding-top: 70%;
-    transform-origin: top;
-    background-size: cover;
-    overflow: hidden;
-    border-bottom-left-radius: 10%;
-    border-bottom-right-radius: 10%;
-    color: #fff;
-    
+    width: 100vw;
+    color: #1a73e8;
+    text-align: center;
+    object-fit: cover;
+  
+    > img {
+      width: 68%;
+      border-radius: 10%;
+      box-shadow: 6px 9px 17px rgba(0, 0, 0, .17);
+    }
     
     > .music-title {
+      padding-top: 30px;
+      width: 100%;
+      height: 100%;
       margin-top: 10px;
       
       .icon-back {

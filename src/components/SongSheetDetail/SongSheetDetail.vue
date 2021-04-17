@@ -27,14 +27,16 @@ export default {
   methods: {
     ...mapGetters(['songSheet']),
     async fetchSongSheetSongs() {
-      const res = await this.$http.get('/songlist', {params: {id: 7708323620}});
-      this.songSheetSongsList = res.data.data.songlist;
-      console.log(res.data.data.songlist);
-      
+      const res = await this.$http.get('/songlist', {params: {id: this.songSheet().id}});
+      this.songSheetSongsList = res.data.data.songlist.map(item => ({
+        id: item.songmid,
+        name: item.songname,
+        singerName: item.singer[0].name,
+        songAlbum: item.albumname
+      }));
     }
   },
   created() {
-    console.log(this.songSheet());
     this.fetchSongSheetSongs();
   }
 };
