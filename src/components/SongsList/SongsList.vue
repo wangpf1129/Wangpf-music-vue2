@@ -43,6 +43,9 @@ export default {
       .song_dec{
         font-size: 14px;
         color: #aaa;
+        overflow: hidden; /*超出隐藏*/
+        white-space: nowrap; /*强制在同一行显示*/
+        text-overflow: ellipsis; /*省略号*/
       }
     }
   }

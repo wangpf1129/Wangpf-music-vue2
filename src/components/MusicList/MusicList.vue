@@ -2,7 +2,7 @@
   <div class="music-list-wrapper">
     <div class="bg-image" :style="bgStyle">
       <div class="music-title">
-        <span class="icon-back">back</span>
+        <span class="icon-back" @click="back">back</span>
         <span class="title">{{ title }}</span>
       </div>
       <div class="filter">随机播放</div>
@@ -39,6 +39,11 @@ export default {
       return `background-image:url(${this.bgUrl})`;
     }
   },
+  methods:{
+    back(){
+      this.$router.back()
+    }
+  }
 };
 </script>
 

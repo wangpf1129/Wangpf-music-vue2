@@ -17,20 +17,7 @@
 </template>
 
 <script>
-const data = [
-  {
-    title: 'Ant Design Title 1',
-  },
-  {
-    title: 'Ant Design Title 2',
-  },
-  {
-    title: 'Ant Design Title 3',
-  },
-  {
-    title: 'Ant Design Title 4',
-  },
-];
+
 export default {
   name: 'SongSheetList',
   props: {
@@ -39,11 +26,6 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      data
-    };
-  }
 };
 </script>
 
@@ -78,6 +60,9 @@ export default {
           font-size: 14px;
           color: #afafaf;
           padding-top: 4px;
+          overflow: hidden; /*超出隐藏*/
+          white-space: nowrap; /*强制在同一行显示*/
+          text-overflow: ellipsis; /*省略号*/
         }
       }
     }
