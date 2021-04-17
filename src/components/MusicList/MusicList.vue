@@ -7,16 +7,19 @@
       </div>
       <div class="filter">随机播放</div>
     </div>
-    <songs-list :songs-list="songsList"></songs-list>
+    <scroll :list="songsList" ref="scroll" :top="263">
+      <songs-list :songs-list="songsList"></songs-list>
+    </scroll>
   </div>
 </template>
 
 <script>
 import SongsList from '@/components/SongsList/SongsList';
+import Scroll from '@/common/Scroll';
 
 export default {
   name: 'MusicList',
-  components: {SongsList},
+  components: {Scroll, SongsList},
   props: {
     title: {
       type: String,
@@ -56,6 +59,9 @@ export default {
     padding-top: 70%;
     transform-origin: top;
     background-size: cover;
+    overflow: hidden;
+    border-bottom-left-radius: 10%;
+    border-bottom-right-radius: 10%;
     color: #fff;
     
     
