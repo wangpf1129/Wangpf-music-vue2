@@ -1,15 +1,20 @@
 <template>
-  <div class="player-wrapper">
-    <div class="normal-player">
+  <div class="player-wrapper" v-if="playList.length > 0">
+    <div class="normal-player" v-if="fullscreen">
       播放器
     </div>
-    <div class="mini-player"></div>
+    <div class="mini-player" v-else></div>
   </div>
 </template>
 
 <script>
+import {mapGetters} from 'vuex';
+
 export default {
-  name: 'Player'
+  name: 'Player',
+  computed: {
+    ...mapGetters(['playList', 'fullscreen'])
+  }
 };
 </script>
 
@@ -25,12 +30,13 @@ export default {
   display: flex;
   flex-direction: column;
   
-  >.normal-player{
+  > .normal-player {
     color: #000;
     flex: 1;
     font-weight: 700;
   }
-  >.mini-player{
+  
+  > .mini-player {
     height: 10%;
     border: 1px solid red;
   }
