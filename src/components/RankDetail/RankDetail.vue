@@ -31,10 +31,12 @@ export default {
       this.rankSongList = res.data.data.list.map(item => ({
         id: item.songId,
         albumID: item.album.pmid,
+        songPlayID: item.mid,
         name: item.name,
         singerName: item.singer[0].name,
         songAlbum: item.album.name
       }));
+      // console.log(res.data.data.list);
     },
   },
   created() {

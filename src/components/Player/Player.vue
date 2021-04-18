@@ -1,66 +1,80 @@
 <template>
   <div class="player-wrapper" v-if="playList.length > 0">
-    <div class="normal-player" v-if="fullscreen">
-      <div class="background">
-        <img :src="albumImgUrl" alt="">
+    <transition name="normal"
+                appear
+                @enter="enter"
+                @after-enter="afterEnter"
+                @leave="leave"
+                @after-leave="afterLeave"
+    >
+      <div class="normal-player" v-show="fullscreen">
+        <div class="background">
+          <img :src="albumImgUrl" alt="">
+        </div>
+        <div class="top">
+          <div class="back" @click="back">
+            <a-icon type="arrow-left"/>
+          </div>
+          <div class="title">
+            <span class="songName">{{ currentSong.name }}</span>
+            <span class="singerName">{{ currentSong.singerName }}</span>
+          </div>
+        </div>
+        <div class="middle">
+          <div class="middle-l">
+            <div class="cd-wrapper" ref="cdWrapper">
+              <div class="cd">
+                <img class="image" :src="albumImgUrl" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bottom">
+          <div class="operators">
+          <span class="icon-list">
+            <a-icon type="rollback"/>
+          </span>
+            <span class="icon-prev">
+            <a-icon type="backward" theme="filled"/>
+          </span>
+            <span class="icon-play">
+            <a-icon type="play-circle"/>
+          </span>
+            <span class="icon-next">
+            <a-icon type="forward" theme="filled"/>
+          </span>
+            <span class="icon-favorite">
+            <a-icon type="heart"/>
+          </span>
+          </div>
+        </div>
       </div>
-      <div class="top">
-        <div class="back" @click="back">
-          <a-icon type="arrow-left"/>
+    </transition>
+    <transition name="mini">
+      <div class="mini-player" @click="open" v-show="!fullscreen">
+        <div class="icon-img">
+          <img :src="albumImgUrl" alt="">
         </div>
         <div class="title">
           <span class="songName">{{ currentSong.name }}</span>
           <span class="singerName">{{ currentSong.singerName }}</span>
         </div>
-      </div>
-      <div class="middle">
-        <div class="middle-l">
-          <div class="cd-wrapper">
-            <div class="cd">
-              <img class="image" :src="albumImgUrl" alt="">
-            </div>
-          </div>
+        <div class="control"></div>
+        <div class="control">
+          <a-icon type="pic-center"/>
         </div>
       </div>
-      <div class="bottom">
-        <div class="operators">
-          <span class="icon-list">
-            <a-icon type="rollback"/>
-          </span>
-          <span class="icon-prev">
-            <a-icon type="backward" theme="filled"/>
-          </span>
-          <span class="icon-play">
-            <a-icon type="play-circle"/>
-          </span>
-          <span class="icon-next">
-            <a-icon type="forward" theme="filled"/>
-          </span>
-          <span class="icon-favorite">
-            <a-icon type="heart"/>
-          </span>
-        </div>
-      </div>
-    </div>
-    <div class="mini-player" @click="open" v-if="!fullscreen">
-      <div class="icon-img">
-        <img :src="albumImgUrl" alt="">
-      </div>
-      <div class="title">
-        <span class="songName">{{ currentSong.name }}</span>
-        <span class="singerName">{{ currentSong.singerName }}</span>
-      </div>
-      <div class="control"></div>
-      <div class="control">
-        <a-icon type="pic-center"/>
-      </div>
-    </div>
+    </transition>
+<!--    <audio :src="playUrl"></audio>-->
   </div>
 </template>
 
 <script>
 import {mapGetters, mapMutations} from 'vuex';
+import animations from 'create-keyframe-animation';
+import {prefixStyle} from '@/common/JS/dom';
 
+const transform = prefixStyle('transform');
 export default {
   name: 'Player',
   computed: {
@@ -76,6 +90,56 @@ export default {
     open() {
       this.setFullscreen(true);
     },
+    enter(el, done) {
+      const {x, y, scale} = this._getPosAndScale();
+      let animation = {
+        0: {
+          transform: `translate3d(${x}px,${y}px,0) scale(${scale})`
+        },
+        60: {
+          transform: `translate3d(0,0,0) scale(1.1)`
+        },
+        100: {
+          transform: `translate3d(0,0,0) scale(1)`
+        },
+      };
+      animations.registerAnimation({
+        name: 'move',
+        animation,
+        presets: {
+          duration: 400,
+          easing: 'linear'
+        }
+      });
+      animations.runAnimation(this.$refs.cdWrapper, 'move', done);
+    },
+    afterEnter() {
+      animations.unregisterAnimation('move');
+      this.$refs.cdWrapper.style.animation = '';
+    },
+    leave(el, done) {
+      this.$refs.cdWrapper.style.transition = 'all 0.4s';
+      const {x, y, scale} = this._getPosAndScale();
+      this.$refs.cdWrapper.style[transform] = `translate3d(${x}px,${y}px,0) scale(${scale})`;
+      this.$refs.cdWrapper.addEventListener('transitionend', done);
+    },
+    afterLeave() {
+      this.$refs.cdWrapper.style.transition = '';
+      this.$refs.cdWrapper.style[transform] = '';
+    },
+    _getPosAndScale() {
+      const targetWidth = 40;
+      const paddingLeft = 40;
+      const paddingBottom = 30;
+      const paddingTop = 80;
+      const width = window.innerWidth * 0.8;
+      const scale = targetWidth / width;
+      const x = -(window.innerWidth / 2 - paddingLeft);
+      const y = window.innerHeight - paddingTop - width / 2 - paddingBottom;
+      return {
+        x, y, scale
+      };
+    },
     ...mapMutations({
       setFullscreen: 'SET_FULL_SCREEN'
     })
@@ -86,6 +150,26 @@ export default {
 <style lang="scss" scoped>
 .player-wrapper {
   display: flex;
+  
+  .normal-enter-active, .normal-leave-active {
+    transition: all .4s;
+    
+    .top, .bottom {
+      transition: all .4s cubic-bezier(0.86, 0.18, 0.82, 1.32);
+    }
+  }
+  
+  .normal-enter, .normal-leave-to {
+    opacity: 0;
+    
+    .top {
+      transform: translate3d(0, -100px, 0);
+    }
+    
+    .bottom {
+      transform: translate3d(0, 100px, 0);
+    }
+  }
   
   > .normal-player {
     position: fixed;
@@ -124,7 +208,7 @@ export default {
       
       .back {
         z-index: 2;
-        padding:0 10px;
+        padding: 0 10px;
         font-size: 20px;
         color: #1a73e8;
       }

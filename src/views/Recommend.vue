@@ -20,7 +20,7 @@ import {mapMutations} from 'vuex';
 
 export default {
   name: 'Recommend',
-  components: {Scroll, SongSheetList, MySwiper,Loading},
+  components: {Scroll, SongSheetList, MySwiper, Loading},
   data() {
     return {
       swiperList: [],
@@ -40,7 +40,6 @@ export default {
         num: item.listen_num,
         title: item.title
       }));
-      
     },
     selectSongSheet(songSheet) {
       this.$router.push({
@@ -51,7 +50,7 @@ export default {
     scrollRefresh() {
       this.$refs.scroll.refresh();
     },
-    ...mapMutations({setSongSheet: 'SET_SONG_SHEET'})
+    ...mapMutations({setSongSheet: 'SET_SONG_SHEET'}),
   },
   created() {
     this.fetchSwiperList();

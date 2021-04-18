@@ -31,13 +31,20 @@ export default {
       this.songSheetSongsList = res.data.data.songlist.map(item => ({
         id: item.songmid,
         albumID: item.albummid,
+        songPlayID: item.songmid,
         name: item.songname,
         singerName: item.singer[0].name,
         songAlbum: item.albumname
       }));
-    }
+      // console.log(res.data.data.songlist);
+    },
+    async fetchSongUrl(mid) {
+      const res = await this.$http.get('/song/urls', {params: {id: mid}});
+      return res.data.data;
+    },
   },
   created() {
+    this.fetchSongUrl();
     this.fetchSongSheetSongs();
   }
 };
