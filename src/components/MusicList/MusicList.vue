@@ -18,6 +18,7 @@
 <script>
 import SongsList from '@/components/MusicList/SongsList';
 import Scroll from '@/common/Scroll';
+import {mapActions} from 'vuex';
 
 export default {
   name: 'MusicList',
@@ -46,8 +47,13 @@ export default {
       this.$router.back();
     },
     selectSong(song, index) {
-      console.log(song, index);
-    }
+      // console.log(song, index);
+      this.selectPlay({
+        list: this.songsList,
+        index: index
+      });
+    },
+    ...mapActions(['selectPlay'])
   }
   
 };
