@@ -12,8 +12,8 @@ import SingerDetail from '@/components/SingerDetail/SingerDetail';
 import SongSheetDetail from '@/components/SongSheetDetail/SongSheetDetail';
 import RankDetail from '@/components/RankDetail/RankDetail';
 
+// 处理报错冗余导航 Error: Avoided redundant navigation to current location
 const originalPush = VueRouter.prototype.push;
-
 VueRouter.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err);
 };

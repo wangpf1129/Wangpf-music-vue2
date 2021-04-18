@@ -2,7 +2,9 @@
   <div class="music-list-wrapper">
     <div class="bg-image">
       <div class="music-title">
-        <span class="icon-back" @click="back">back</span>
+        <span class="icon-back" @click="back">
+          <a-icon type="arrow-left"/>
+        </span>
         <span class="title">{{ title }}</span>
       </div>
       <img :src="bgUrl" alt="">
@@ -79,9 +81,9 @@ export default {
       
       .icon-back {
         position: absolute;
-        top: 2px;
+        top: -4px;
         left: 8px;
-        font-size: 16px;
+        font-size: 22px;
         display: block;
       }
       

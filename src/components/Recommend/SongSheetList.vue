@@ -1,5 +1,6 @@
 <template>
   <div class="song-sheet-list-Wrapper">
+    <h2 class="recommend-title">推荐歌单</h2>
     <ul class="song-sheet">
       <li
         class="song-sheet-item"
@@ -27,9 +28,9 @@ export default {
       required: true
     }
   },
-  methods:{
-    selectSongSheet(songSheet){
-      this.$emit('select-song-sheet',songSheet)
+  methods: {
+    selectSongSheet(songSheet) {
+      this.$emit('select-song-sheet', songSheet);
     }
   }
 };
@@ -37,11 +38,18 @@ export default {
 
 <style lang="scss" scoped>
 .song-sheet-list-Wrapper {
+  .recommend-title {
+    color: #1a73e8;
+    padding: 10px 10px 0 10px;
+    margin: 0;
+    font-size: 18px;
+  }
+  
   .song-sheet {
     display: flex;
     flex-direction: column;
     padding: 10px 6px;
-
+    
     
     .song-sheet-item {
       padding: 10px;
@@ -52,17 +60,18 @@ export default {
         border-radius: 6px;
       }
       
-      .song-sheet-info{
+      .song-sheet-info {
         display: flex;
         flex-direction: column;
         margin-left: 14px;
         
-        .title{
+        .title {
           font-size: 16px;
           font-weight: 700;
           padding-bottom: 6px;
         }
-        .info{
+        
+        .info {
           font-size: 14px;
           color: #afafaf;
           padding-top: 4px;

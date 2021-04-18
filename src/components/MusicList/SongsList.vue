@@ -1,17 +1,21 @@
 <template>
   <div class="songs-list">
-    <ul>
+    <ul v-if="songsList.length > 0">
       <li class="song-item" v-for="song of songsList" :key="song.id">
         <span class="song_name">{{ song.name }}</span>
         <span class="song_dec">{{ song.singerName }} - {{ song.songAlbum }}</span>
       </li>
     </ul>
+    <loading v-else></loading>
   </div>
 </template>
 
 <script>
+import Loading from '@/common/Loading';
+
 export default {
   name: 'SongsList',
+  components: {Loading},
   props: {
     songsList: {
       type: Array,
