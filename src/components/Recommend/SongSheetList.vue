@@ -1,6 +1,6 @@
 <template>
   <div class="song-sheet-list-Wrapper">
-    <h2 class="recommend-title">推荐歌单</h2>
+    <h2 class="recommend-title">热门歌单推荐</h2>
     <ul class="song-sheet">
       <li
         class="song-sheet-item"
@@ -11,7 +11,7 @@
         <img :src="item.imgUrl" alt="">
         <div class="song-sheet-info">
           <span class="title">{{ item.title }}</span>
-          <span class="info">{{ item.info }}</span>
+          <span class="info">{{ '播放量：'+ _listenNumber(item.num) +'万' }}</span>
         </div>
       </li>
     </ul>
@@ -31,8 +31,11 @@ export default {
   methods: {
     selectSongSheet(songSheet) {
       this.$emit('select-song-sheet', songSheet);
+    },
+    _listenNumber(num) {
+      return (num / 10000).toFixed(1);
     }
-  }
+  },
 };
 </script>
 

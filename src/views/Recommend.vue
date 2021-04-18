@@ -37,9 +37,10 @@ export default {
       this.recommendedSong = res.data.data.list.map(item => ({
         id: item.content_id,
         imgUrl: item.cover,
-        info: item.title,
-        title: item.username
+        num: item.listen_num,
+        title: item.title
       }));
+      
     },
     selectSongSheet(songSheet) {
       this.$router.push({
