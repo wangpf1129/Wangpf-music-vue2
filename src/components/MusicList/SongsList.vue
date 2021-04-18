@@ -19,7 +19,7 @@ export default {
   props: {
     songsList: {
       type: Array,
-      required: true
+      default: () => []
     }
   },
 };
