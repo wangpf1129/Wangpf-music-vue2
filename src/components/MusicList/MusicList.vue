@@ -10,7 +10,7 @@
       <img :src="bgUrl" alt="">
     </div>
     <scroll :list="songsList" ref="scroll" :top="230">
-      <songs-list :songs-list="songsList"></songs-list>
+      <songs-list :songs-list="songsList" @select-song="selectSong"></songs-list>
     </scroll>
   </div>
 </template>
@@ -44,6 +44,9 @@ export default {
   methods: {
     back() {
       this.$router.back();
+    },
+    selectSong(song, index) {
+      console.log(song, index);
     }
   }
   
@@ -66,7 +69,7 @@ export default {
     color: #1a73e8;
     text-align: center;
     object-fit: cover;
-  
+    
     > img {
       width: 48%;
       border-radius: 10%;
