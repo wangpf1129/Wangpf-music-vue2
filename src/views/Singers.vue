@@ -3,7 +3,8 @@
     <scroll :list="singersList" :top="100" ref="scroll">
       <div class="scroll-wrapper">
         <singers-category :category="singersCategory" @category-click="fetchSingersList"/>
-        <singers-list :list="singersList" @select-singer="selectSinger"/>
+        <singers-list v-if="singersList.length > 0" :list="singersList" @select-singer="selectSinger"/>
+        <loading v-else></loading>
       </div>
     </scroll>
     <router-view></router-view>
@@ -14,12 +15,13 @@
 import SingersCategory from '@/components/Singers/SingersCategory';
 import SingersList from '@/components/Singers/SingersList';
 import Scroll from '@/common/Scroll';
+import Loading from '@/common/Loading';
 import {mapMutations} from 'vuex';
 
 
 export default {
   name: 'Singers',
-  components: {SingersCategory, SingersList, Scroll},
+  components: {SingersCategory, SingersList, Scroll, Loading},
   data() {
     return {
       singersCategory: {},

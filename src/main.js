@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-import { Carousel } from 'ant-design-vue';
+import { Carousel ,Spin} from 'ant-design-vue';
 
 import App from './App.vue';
 import router from './router';
@@ -10,6 +10,7 @@ import './assets/style/reset.scss';
 
 // antd
 Vue.component(Carousel.name, Carousel);
+Vue.component(Spin.name, Spin);
 
 Vue.config.productionTip = false;
 

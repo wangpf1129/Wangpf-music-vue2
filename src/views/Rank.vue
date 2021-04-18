@@ -2,7 +2,8 @@
   <div class="rank-wrapper">
     <scroll :list="rankList" :top="100">
       <div class="scroll-wrapper">
-        <rank-item :rank-list="rankList" @select-rank-sheet="selectRankSheet"/>
+        <rank-item v-if="rankList.length>0" :rank-list="rankList" @select-rank-sheet="selectRankSheet"/>
+        <loading v-else></loading>
       </div>
     </scroll>
     <router-view></router-view>
@@ -12,11 +13,12 @@
 <script>
 import RankItem from '@/components/Rank/RankItem';
 import Scroll from '@/common/Scroll';
+import Loading from '@/common/Loading';
 import {mapMutations} from 'vuex';
 
 export default {
   name: 'Rank',
-  components: {Scroll, RankItem},
+  components: {Scroll, RankItem, Loading},
   data() {
     return {
       rankList: []

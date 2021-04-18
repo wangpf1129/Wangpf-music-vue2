@@ -4,6 +4,7 @@
       <div class="scroll-wrapper">
         <my-swiper :swiper-list="swiperList" @img-load="scrollRefresh"/>
         <song-sheet-list :recommended-song="recommendedSong" @select-song-sheet="selectSongSheet"/>
+        <loading v-show="recommendedSong.length === 0"></loading>
       </div>
     </scroll>
     <router-view></router-view>
@@ -14,11 +15,12 @@
 import MySwiper from '@/components/Recommend/MySwiper';
 import SongSheetList from '@/components/Recommend/SongSheetList';
 import Scroll from '@/common/Scroll';
+import Loading from '@/common/Loading';
 import {mapMutations} from 'vuex';
 
 export default {
   name: 'Recommend',
-  components: {Scroll, SongSheetList, MySwiper},
+  components: {Scroll, SongSheetList, MySwiper,Loading},
   data() {
     return {
       swiperList: [],
