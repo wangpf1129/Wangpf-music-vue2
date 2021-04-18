@@ -11,7 +11,6 @@
         <div class="title">
           <span class="songName">{{ currentSong.name }}</span>
           <span class="singerName">{{ currentSong.singerName }}</span>
-          <span>{{ currentSong.albumID }}</span>
         </div>
       </div>
       <div class="middle">
@@ -121,28 +120,39 @@ export default {
       position: relative;
       display: flex;
       align-items: center;
+      justify-content: center;
       
       .back {
         z-index: 2;
-        padding-left: 10px;
+        padding:0 10px;
         font-size: 20px;
         color: #1a73e8;
       }
       
       .title {
+        flex: 1;
+        padding: 0 24px;
         text-align: center;
         margin-left: -28px;
         margin-top: 10px;
-        flex: 1;
         display: flex;
         flex-direction: column;
+        overflow: hidden; /*超出隐藏*/
+        white-space: nowrap; /*强制在同一行显示*/
+        text-overflow: ellipsis; /*省略号*/
         
         > .songName {
           font-size: 20px;
+          overflow: hidden; /*超出隐藏*/
+          white-space: nowrap; /*强制在同一行显示*/
+          text-overflow: ellipsis; /*省略号*/
         }
         
         > .singerName {
           font-size: 16px;
+          overflow: hidden; /*超出隐藏*/
+          white-space: nowrap; /*强制在同一行显示*/
+          text-overflow: ellipsis; /*省略号*/
         }
       }
       
@@ -237,14 +247,23 @@ export default {
       display: flex;
       flex-direction: column;
       padding-left: 4px;
-      
+      overflow: hidden; /*超出隐藏*/
+      white-space: nowrap; /*强制在同一行显示*/
+      text-overflow: ellipsis; /*省略号*/
       .songName {
         font-size: 16px;
         font-weight: 700;
+        overflow: hidden; /*超出隐藏*/
+        white-space: nowrap; /*强制在同一行显示*/
+        text-overflow: ellipsis; /*省略号*/
+        
       }
       
       .singerName {
         font-size: 14px;
+        overflow: hidden; /*超出隐藏*/
+        white-space: nowrap; /*强制在同一行显示*/
+        text-overflow: ellipsis; /*省略号*/
       }
     }
     
