@@ -30,11 +30,11 @@ export default {
       const res = await this.$http.get('/top', {params: {id: this.rankSheet.topId}});
       this.rankSongList = res.data.data.list.map(item => ({
         id: item.songId,
+        albumID: item.album.pmid,
         name: item.name,
         singerName: item.singer[0].name,
         songAlbum: item.album.name
       }));
-      
     },
   },
   created() {

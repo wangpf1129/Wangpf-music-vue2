@@ -1,22 +1,24 @@
-<template><div class="player-wrapper" v-show="playList.length > 0">
+<template>
+  <div class="player-wrapper" v-if="playList.length > 0">
     <div class="normal-player" v-if="fullscreen">
       <div class="background">
-        <img src="~@/assets/image/bg.jpeg" alt="">
+        <img :src="albumImgUrl" alt="">
       </div>
       <div class="top">
         <div class="back" @click="back">
           <a-icon type="arrow-left"/>
         </div>
         <div class="title">
-          <span class="songName">{{currentSong.name}}</span>
+          <span class="songName">{{ currentSong.name }}</span>
           <span class="singerName">{{ currentSong.singerName }}</span>
+          <span>{{ currentSong.albumID }}</span>
         </div>
       </div>
       <div class="middle">
         <div class="middle-l">
           <div class="cd-wrapper">
             <div class="cd">
-              <img class="image" src="~@/assets/image/bg.jpeg" alt="">
+              <img class="image" :src="albumImgUrl" alt="">
             </div>
           </div>
         </div>
@@ -43,11 +45,11 @@
     </div>
     <div class="mini-player" @click="open" v-if="!fullscreen">
       <div class="icon-img">
-        <img src="~@/assets/image/bg.jpeg" alt="">
+        <img :src="albumImgUrl" alt="">
       </div>
       <div class="title">
-        <span class="songName">晴天</span>
-        <span class="singerName">周杰伦</span>
+        <span class="songName">{{ currentSong.name }}</span>
+        <span class="singerName">{{ currentSong.singerName }}</span>
       </div>
       <div class="control"></div>
       <div class="control">
@@ -63,7 +65,10 @@ import {mapGetters, mapMutations} from 'vuex';
 export default {
   name: 'Player',
   computed: {
-    ...mapGetters(['playList', 'fullscreen', 'currentSong'])
+    ...mapGetters(['playList', 'fullscreen', 'currentSong']),
+    albumImgUrl() {
+      return `https://y.gtimg.cn/music/photo_new/T002R300x300M000${this.currentSong.albumID}.jpg`;
+    }
   },
   methods: {
     back() {

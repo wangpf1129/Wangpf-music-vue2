@@ -28,11 +28,12 @@ export default {
     ...mapGetters(['singer']),
     async fetchSingerSongs() {
       const res = await this.$http.get('/singer/songs', {params: {singermid: this.singer().singer_mid,}});
-      this.songsList = res.data.data.list.map(item=>({
-        id:item.id,
-        name:item.name,
-        singerName:item.singer[0].name,
-        songAlbum:item.album.name
+      this.songsList = res.data.data.list.map(item => ({
+        id: item.id,
+        albumID:item.album.pmid,
+        name: item.name,
+        singerName: item.singer[0].name,
+        songAlbum: item.album.name
       }));
     }
   },

@@ -30,6 +30,7 @@ export default {
       const res = await this.$http.get('/songlist', {params: {id: this.songSheet().id}});
       this.songSheetSongsList = res.data.data.songlist.map(item => ({
         id: item.songmid,
+        albumID: item.albummid,
         name: item.songname,
         singerName: item.singer[0].name,
         songAlbum: item.albumname
