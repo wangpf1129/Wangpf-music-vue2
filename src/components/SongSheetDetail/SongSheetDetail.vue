@@ -1,5 +1,5 @@
 <template>
-  <transition name="slide-fade">
+  <transition name="slide" appear>
     <music-list :title="title" :bg-url="bgUrl" :songs-list="songSheetSongsList"></music-list>
   </transition>
 </template>
@@ -44,11 +44,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.slide-fade-enter-active, .slide-fade-leave-active {
-  transition: all .6s;
+.slide-enter-active, .slide-leave-active {
+  transition: all .3s;
 }
 
-.slide-fade-enter, .slide-fade-leave-to {
+.slide-enter, .slide-leave-to {
   transform: translate3d(100%, 0, 0);
 }
 </style>
