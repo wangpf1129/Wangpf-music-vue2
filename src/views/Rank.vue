@@ -2,7 +2,7 @@
   <div class="rank-wrapper">
     <scroll :list="rankList" :top="100">
       <div class="scroll-wrapper">
-        <rank-item v-if="rankList.length>0" :rank-list="rankList" @select-rank-sheet="selectRankSheet"/>
+        <rank-item v-if="rankList.length > 0" :rank-list="rankList" @select-rank-sheet="selectRankSheet"/>
         <loading v-else></loading>
       </div>
     </scroll>
@@ -28,6 +28,7 @@ export default {
     async fetchSongsRank() {
       const res = await this.$http.get('/top/category', {params: {showDetail: 1}});
       this.rankList = res.data.data.reduce((newValue, item) => newValue.concat(item.list), []);
+      console.log(this.rankList);
     },
     selectRankSheet(rank) {
       this.$router.push({

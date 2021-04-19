@@ -27,7 +27,7 @@ export default {
   methods: {
     ...mapGetters(['rankSheet']),
     async fetchRankSongList() {
-      const res = await this.$http.get('/top', {params: {id: this.rankSheet.topId}});
+      const res = await this.$http.get('/top', {params: {id: this.rankSheet().topId}});
       this.rankSongList = res.data.data.list.map(item => ({
         id: item.songId,
         albumID: item.album.pmid,
