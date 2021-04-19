@@ -38,13 +38,8 @@ export default {
       }));
       // console.log(res.data.data.songlist);
     },
-    async fetchSongUrl(mid) {
-      const res = await this.$http.get('/song/urls', {params: {id: mid}});
-      return res.data.data;
-    },
   },
   created() {
-    this.fetchSongUrl();
     this.fetchSongSheetSongs();
   }
 };

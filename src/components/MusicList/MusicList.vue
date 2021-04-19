@@ -46,8 +46,7 @@ export default {
     back() {
       this.$router.back();
     },
-    selectSong(song, index) {
-      console.log(song);
+    async selectSong(song, index) {
       this.selectPlay({
         list: this.songsList,
         index

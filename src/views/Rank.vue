@@ -28,7 +28,6 @@ export default {
     async fetchSongsRank() {
       const res = await this.$http.get('/top/category', {params: {showDetail: 1}});
       this.rankList = res.data.data.reduce((newValue, item) => newValue.concat(item.list), []);
-      console.log(this.rankList);
     },
     selectRankSheet(rank) {
       this.$router.push({

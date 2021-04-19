@@ -18,6 +18,7 @@
           <div class="title">
             <span class="songName">{{ currentSong.name }}</span>
             <span class="singerName">{{ currentSong.singerName }}</span>
+            <span>{{playUrl}}</span>
           </div>
         </div>
         <div class="middle">
@@ -65,7 +66,7 @@
         </div>
       </div>
     </transition>
-<!--    <audio :src="playUrl"></audio>-->
+        <audio :src="playUrl"></audio>
   </div>
 </template>
 
@@ -77,6 +78,11 @@ import {prefixStyle} from '@/common/JS/dom';
 const transform = prefixStyle('transform');
 export default {
   name: 'Player',
+  data() {
+    return {
+      playUrl: ''
+    };
+  },
   computed: {
     ...mapGetters(['playList', 'fullscreen', 'currentSong']),
     albumImgUrl() {
@@ -140,10 +146,19 @@ export default {
         x, y, scale
       };
     },
+    async fetchSongUrl(id) {
+      const res = await this.$http.get('/song/urls', {params: {id}});
+      return res.data.data[id];
+    },
     ...mapMutations({
       setFullscreen: 'SET_FULL_SCREEN'
     })
   },
+  watch: {
+    async currentSong(value) {
+      this.playUrl = await this.fetchSongUrl(value.songPlayID);
+    }
+  }
 };
 </script>
 
