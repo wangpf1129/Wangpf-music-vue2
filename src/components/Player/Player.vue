@@ -13,18 +13,17 @@
         </div>
         <div class="top">
           <div class="back" @click="back">
-            <a-icon type="arrow-left"/>
+            <a-icon type="arrow-down"/>
           </div>
           <div class="title">
             <span class="songName">{{ currentSong.name }}</span>
             <span class="singerName">{{ currentSong.singerName }}</span>
-            <span>{{playUrl}}</span>
           </div>
         </div>
         <div class="middle">
           <div class="middle-l">
             <div class="cd-wrapper" ref="cdWrapper">
-              <div class="cd">
+              <div class="cd" :class="cdClass">
                 <img class="image" :src="albumImgUrl" alt="">
               </div>
             </div>
@@ -38,8 +37,8 @@
             <span class="icon-prev">
             <a-icon type="backward" theme="filled"/>
           </span>
-            <span class="icon-play">
-            <a-icon type="play-circle"/>
+            <span class="icon-play" @click="togglePlaying">
+            <a-icon :type="playIcon"/>
           </span>
             <span class="icon-next">
             <a-icon type="forward" theme="filled"/>
@@ -54,19 +53,23 @@
     <transition name="mini">
       <div class="mini-player" @click="open" v-show="!fullscreen">
         <div class="icon-img">
-          <img :src="albumImgUrl" alt="">
+          <img :class="cdClass" :src="albumImgUrl" alt="">
         </div>
         <div class="title">
           <span class="songName">{{ currentSong.name }}</span>
           <span class="singerName">{{ currentSong.singerName }}</span>
         </div>
-        <div class="control"></div>
+        <div class="control">
+           <span class="icon-play" @click.stop="togglePlaying">
+            <a-icon :type="playIcon"/>
+          </span>
+        </div>
         <div class="control">
           <a-icon type="pic-center"/>
         </div>
       </div>
     </transition>
-        <audio :src="playUrl"></audio>
+    <audio ref="audio" :src="playUrl"></audio>
   </div>
 </template>
 
@@ -84,9 +87,15 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['playList', 'fullscreen', 'currentSong']),
+    ...mapGetters(['playList', 'fullscreen', 'currentSong', 'playing']),
     albumImgUrl() {
       return `https://y.gtimg.cn/music/photo_new/T002R300x300M000${this.currentSong.albumID}.jpg`;
+    },
+    playIcon() {
+      return this.playing ? 'pause-circle' : 'play-circle';
+    },
+    cdClass() {
+      return this.playing ? 'play-fade' : 'play-fade pause-fade';
     }
   },
   methods: {
@@ -150,13 +159,29 @@ export default {
       const res = await this.$http.get('/song/urls', {params: {id}});
       return res.data.data[id];
     },
+    togglePlaying() {
+      this.setPlayingState(!this.playing);
+    },
     ...mapMutations({
-      setFullscreen: 'SET_FULL_SCREEN'
+      setFullscreen: 'SET_FULL_SCREEN',
+      setPlayingState: 'SET_PLAYING_STATE'
     })
   },
   watch: {
     async currentSong(value) {
       this.playUrl = await this.fetchSongUrl(value.songPlayID);
+      console.log(this.playUrl);
+    },
+    playUrl() {
+      this.$nextTick(() => {
+        this.$refs.audio.play();
+      });
+    },
+    playing(newPlaying) {
+      const audio = this.$refs.audio;
+      this.$nextTick(() => {
+        newPlaying ? (audio && audio.play()) : (audio && audio.pause());
+      });
     }
   }
 };
@@ -287,6 +312,14 @@ export default {
             border: 10px solid rgba(255, 255, 255, 0.1);
             border-radius: 50%;
             
+            &.play-fade {
+              animation: rotate 20s linear infinite;
+            }
+            
+            &.pause-fade {
+              animation-play-state: paused;
+            }
+            
             > .image {
               position: absolute;
               left: 0;
@@ -338,6 +371,14 @@ export default {
       > img {
         width: 100%;
         height: 100%;
+        
+        &.play-fade {
+          animation: rotate 20s linear infinite;
+        }
+        
+        &.pause-fade {
+          animation-play-state: paused;
+        }
       }
     }
     
@@ -370,8 +411,15 @@ export default {
       font-size: 24px;
       padding-right: 20px;
     }
-    
-    
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 </style>
