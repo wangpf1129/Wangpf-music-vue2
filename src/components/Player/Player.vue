@@ -34,13 +34,13 @@
           <span class="icon-list">
             <a-icon type="rollback"/>
           </span>
-            <span class="icon-prev">
+            <span class="icon-prev" @click="prev">
             <a-icon type="backward" theme="filled"/>
           </span>
             <span class="icon-play" @click="togglePlaying">
             <a-icon :type="playIcon"/>
           </span>
-            <span class="icon-next">
+            <span class="icon-next" @click="next">
             <a-icon type="forward" theme="filled"/>
           </span>
             <span class="icon-favorite">
@@ -87,7 +87,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['playList', 'fullscreen', 'currentSong', 'playing']),
+    ...mapGetters(['playList', 'fullscreen', 'currentSong', 'playing', 'currentIndex']),
     albumImgUrl() {
       return `https://y.gtimg.cn/music/photo_new/T002R300x300M000${this.currentSong.albumID}.jpg`;
     },
@@ -105,6 +105,21 @@ export default {
     open() {
       this.setFullscreen(true);
     },
+    prev() {
+      let index = this.currentIndex - 1;
+      if (index === -1) {
+        index = this.playList.length;
+      }
+      this.setCurrentIndex(index);
+    },
+    next() {
+      let index = this.currentIndex + 1;
+      if (index === this.playList.length - 1) {
+        index = 0;
+      }
+      this.setCurrentIndex(index);
+    },
+    
     enter(el, done) {
       const {x, y, scale} = this._getPosAndScale();
       let animation = {
@@ -164,13 +179,13 @@ export default {
     },
     ...mapMutations({
       setFullscreen: 'SET_FULL_SCREEN',
-      setPlayingState: 'SET_PLAYING_STATE'
+      setPlayingState: 'SET_PLAYING_STATE',
+      setCurrentIndex: 'SET_CURRENT_INDEX'
     })
   },
   watch: {
     async currentSong(value) {
       this.playUrl = await this.fetchSongUrl(value.songPlayID);
-      console.log(this.playUrl);
     },
     playUrl() {
       this.$nextTick(() => {
