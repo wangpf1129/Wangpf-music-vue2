@@ -30,9 +30,11 @@
           </div>
         </div>
         <div class="bottom">
-          <span>{{ formatTime(currentTime) }}</span>
-          <br>
-          <span>{{ formatTime(currentSong.duration) }}</span>
+          <div class="progress-bar">
+            <span>{{ formatTime(currentTime) }}</span>
+            <a-progress :percent="percent" :show-info="false" size="small" strokeColor="#000"/>
+            <span>{{ formatTime(currentSong.duration) }}</span>
+          </div>
           <div class="operators">
           <span class="icon-list">
             <a-icon type="rollback"/>
@@ -89,6 +91,7 @@ export default {
       playUrl: '',
       songReady: false,  // 控制歌曲切换速度
       currentTime: 0,
+      percent: 0
     };
   },
   computed: {
@@ -242,6 +245,9 @@ export default {
       this.$nextTick(() => {
         newPlaying ? (audio && audio.play()) : (audio && audio.pause());
       });
+    },
+    currentTime(newCurrentTime) {
+      this.percent = (newCurrentTime / this.currentSong.duration) * 100;
     }
   }
 };
@@ -403,6 +409,19 @@ export default {
         justify-content: space-around;
         align-items: center;
         font-size: 28px;
+      }
+      
+      > .progress-bar {
+        display: flex;
+        margin: 0 auto;
+        padding: 15px;
+        justify-content: center;
+        align-items: center;
+        
+        > span {
+          font-size: 16px;
+          padding: 0 4px;
+        }
       }
     }
   }
