@@ -30,6 +30,8 @@
           </div>
         </div>
         <div class="bottom">
+          <span>{{ formatTime(currentTime) }}</span>
+          
           <div class="operators">
           <span class="icon-list">
             <a-icon type="rollback"/>
@@ -69,7 +71,7 @@
         </div>
       </div>
     </transition>
-    <audio ref="audio" :src="playUrl" @canplay="ready" @error="error"></audio>
+    <audio ref="audio" :src="playUrl" @canplay="ready" @error="error" @timeupdate="updateTime"></audio>
   </div>
 </template>
 
@@ -84,7 +86,8 @@ export default {
   data() {
     return {
       playUrl: '',
-      songReady: false  // 控制歌曲切换速度
+      songReady: false,  // 控制歌曲切换速度
+      currentTime: 0,
     };
   },
   computed: {
@@ -146,6 +149,15 @@ export default {
     },
     error() {
       this.songReady = true;
+    },
+    updateTime(e) {
+      this.currentTime = e.target.currentTime;
+    },
+    formatTime(initial) {
+      initial = initial | 0;
+      const minute = initial / 60 | 0;
+      const second = initial % 60;
+      return `${minute}:${second}`;
     },
     enter(el, done) {
       const {x, y, scale} = this._getPosAndScale();
