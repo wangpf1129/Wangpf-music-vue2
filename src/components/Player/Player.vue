@@ -69,7 +69,7 @@
         </div>
       </div>
     </transition>
-    <audio ref="audio" :src="playUrl"></audio>
+    <audio ref="audio" :src="playUrl" @canplay="ready" @error="error"></audio>
   </div>
 </template>
 
@@ -83,7 +83,8 @@ export default {
   name: 'Player',
   data() {
     return {
-      playUrl: ''
+      playUrl: '',
+      songReady: false  // 控制歌曲切换速度
     };
   },
   computed: {
@@ -106,20 +107,46 @@ export default {
       this.setFullscreen(true);
     },
     prev() {
+      if (!this.songReady) {
+        return;
+      }
       let index = this.currentIndex - 1;
       if (index === -1) {
         index = this.playList.length;
       }
       this.setCurrentIndex(index);
+      if (!this.playing) {  // 如果暂停了就改变状态
+        this.togglePlaying();
+      }
+      this.songReady = false;
     },
     next() {
+      if (!this.songReady) {
+        return;
+      }
       let index = this.currentIndex + 1;
       if (index === this.playList.length - 1) {
         index = 0;
       }
       this.setCurrentIndex(index);
+      if (!this.playing) {
+        this.togglePlaying();
+      }
+      this.songReady = false;
+      
     },
-    
+    togglePlaying() {
+      if (!this.songReady) {
+        return;
+      }
+      this.setPlayingState(!this.playing);
+    },
+    ready() {
+      this.songReady = true;
+    },
+    error() {
+      this.songReady = true;
+    },
     enter(el, done) {
       const {x, y, scale} = this._getPosAndScale();
       let animation = {
@@ -173,9 +200,6 @@ export default {
     async fetchSongUrl(id) {
       const res = await this.$http.get('/song/urls', {params: {id}});
       return res.data.data[id];
-    },
-    togglePlaying() {
-      this.setPlayingState(!this.playing);
     },
     ...mapMutations({
       setFullscreen: 'SET_FULL_SCREEN',
