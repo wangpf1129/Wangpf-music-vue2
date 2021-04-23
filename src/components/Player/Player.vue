@@ -31,7 +31,8 @@
         </div>
         <div class="bottom">
           <span>{{ formatTime(currentTime) }}</span>
-          
+          <br>
+          <span>{{formatTime(currentSong.duration)}}</span>
           <div class="operators">
           <span class="icon-list">
             <a-icon type="rollback"/>

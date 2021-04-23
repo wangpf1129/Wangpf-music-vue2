@@ -34,7 +34,8 @@ export default {
         songPlayID: item.songmid,
         name: item.songname,
         singerName: item.singer[0].name,
-        songAlbum: item.albumname
+        songAlbum: item.albumname,
+        duration:item.interval
       }));
       // console.log(res.data.data.songlist);
     },
