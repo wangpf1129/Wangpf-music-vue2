@@ -32,7 +32,7 @@
         <div class="bottom">
           <span>{{ formatTime(currentTime) }}</span>
           <br>
-          <span>{{formatTime(currentSong.duration)}}</span>
+          <span>{{ formatTime(currentSong.duration) }}</span>
           <div class="operators">
           <span class="icon-list">
             <a-icon type="rollback"/>
@@ -158,7 +158,15 @@ export default {
       initial = initial | 0;
       const minute = initial / 60 | 0;
       const second = initial % 60;
-      return `${minute}:${second}`;
+      return `${minute}:${this._pad(second)}`;
+    },
+    _pad(num, n = 2) {
+      let len = num.toString().length;
+      while (len < n) {
+        num = '0' + num;
+        len++;
+      }
+      return num;
     },
     enter(el, done) {
       const {x, y, scale} = this._getPosAndScale();
