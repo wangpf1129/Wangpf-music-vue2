@@ -1,8 +1,8 @@
 <template>
-  <div class="progress-bar">
+  <div class="progress-bar" ref="progressBar">
     <div class="bar-inner">
-      <div class="progress"></div>
-      <div class="progress-btn-wrapper">
+      <div class="progress" ref="progress"></div>
+      <div class="progress-btn-wrapper" ref="progressBtn">
         <div class="progress-btn"></div>
       </div>
     </div>
@@ -10,8 +10,22 @@
 </template>
 
 <script>
+const progressBtnWidth = 16;
 export default {
-  name: 'ProgressBar'
+  name: 'ProgressBar',
+  props: {
+    percent: {
+      type: Number,
+      default: 0
+    }
+  },
+  watch: {
+    percent(newPercent) {
+      const progressBarWidth = this.$refs.progressBar.clientWidth - progressBtnWidth;
+      const offsetWidth = newPercent * progressBarWidth;
+      this.$refs.progress.style.width = `${offsetWidth}px`;
+    }
+  }
 };
 </script>
 
@@ -30,14 +44,14 @@ export default {
       height: 100%;
       background: #1a73e8;
     }
-  
+    
     .progress-btn-wrapper {
       width: 30px;
       height: 30px;
       position: relative;
       left: -8px;
       top: -13px;
-    
+      
       .progress-btn {
         position: absolute;
         top: 7px;

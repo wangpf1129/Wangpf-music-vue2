@@ -33,7 +33,7 @@
           <div class="progress-bar">
             <span>{{ formatTime(currentTime) }}</span>
             <div class="progress-bar-wrapper">
-              <progress-bar></progress-bar>
+              <progress-bar :percent="percent"></progress-bar>
             </div>
             <span>{{ formatTime(currentSong.duration) }}</span>
           </div>
@@ -251,7 +251,7 @@ export default {
       });
     },
     currentTime(newCurrentTime) {
-      this.percent = (newCurrentTime / this.currentSong.duration) * 100;
+      this.percent = newCurrentTime / this.currentSong.duration;
     }
   }
 };
