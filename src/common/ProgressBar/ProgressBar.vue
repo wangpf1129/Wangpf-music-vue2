@@ -49,12 +49,16 @@ export default {
     },
     progressTouchEnd() {
       this.touch.initiated = false;
+      this._triggerPercent();
+    },
+    _triggerPercent() {
+      const progressBarWidth = this.$refs.progressBar.clientWidth - progressBtnWidth;
+      const percent = this.$refs.progress.clientWidth / progressBarWidth;
+      this.$emit('percentChange', percent);
     },
     _offset(offsetWidth) {
       this.$refs.progress.style.width = `${offsetWidth}px`;
-      this.$refs.progressBtn.style[
-        transform
-        ] = `translate3d(${offsetWidth}px,0,0)`;
+      this.$refs.progressBtn.style[transform] = `translate3d(${offsetWidth}px,0,0)`;
     },
   },
   watch: {

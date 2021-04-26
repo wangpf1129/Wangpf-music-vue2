@@ -33,7 +33,7 @@
           <div class="progress-bar">
             <span>{{ formatTime(currentTime) }}</span>
             <div class="progress-bar-wrapper">
-              <progress-bar :percent="percent"></progress-bar>
+              <progress-bar :percent="percent" @percentChange="onProgressBarChange"></progress-bar>
             </div>
             <span>{{ formatTime(currentSong.duration) }}</span>
           </div>
@@ -145,6 +145,9 @@ export default {
       }
       this.songReady = false;
       
+    },
+    onProgressBarChange(percent) {
+      this.$refs.audio.currentTime = percent * this.currentSong.duration;
     },
     togglePlaying() {
       if (!this.songReady) {
