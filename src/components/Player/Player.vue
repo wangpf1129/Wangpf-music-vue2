@@ -32,7 +32,9 @@
         <div class="bottom">
           <div class="progress-bar">
             <span>{{ formatTime(currentTime) }}</span>
-            <a-progress :percent="percent" :show-info="false" size="small" strokeColor="#000"/>
+            <div class="progress-bar-wrapper">
+              <progress-bar></progress-bar>
+            </div>
             <span>{{ formatTime(currentSong.duration) }}</span>
           </div>
           <div class="operators">
@@ -82,10 +84,12 @@
 import {mapGetters, mapMutations} from 'vuex';
 import animations from 'create-keyframe-animation';
 import {prefixStyle} from '@/common/JS/dom';
+import ProgressBar from '@/common/ProgressBar/ProgressBar';
 
 const transform = prefixStyle('transform');
 export default {
   name: 'Player',
+  components: {ProgressBar},
   data() {
     return {
       playUrl: '',
@@ -421,6 +425,10 @@ export default {
         > span {
           font-size: 16px;
           padding: 0 4px;
+        }
+        
+        .progress-bar-wrapper {
+          flex: 1;
         }
       }
     }
