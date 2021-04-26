@@ -67,12 +67,14 @@
           <span class="singerName">{{ currentSong.singerName }}</span>
         </div>
         <div class="control">
-           <span class="icon-play" @click.stop="togglePlaying">
-            <a-icon :type="playIcon"/>
+          <progress-circle :radius="32" :percent="percent">
+            <span :class="['icon-play','icon-mini']" @click.stop="togglePlaying">
+            <a-icon class="icon" theme="filled" :type="playIcon"/>
           </span>
+          </progress-circle>
         </div>
         <div class="control">
-          <a-icon type="pic-center"/>
+          <a-icon class="icon" type="pic-center"/>
         </div>
       </div>
     </transition>
@@ -85,11 +87,12 @@ import {mapGetters, mapMutations} from 'vuex';
 import animations from 'create-keyframe-animation';
 import {prefixStyle} from '@/common/JS/dom';
 import ProgressBar from '@/common/ProgressBar/ProgressBar';
+import ProgressCircle from '@/common/ProgressCircle/ProgressCircle';
 
 const transform = prefixStyle('transform');
 export default {
   name: 'Player',
-  components: {ProgressBar},
+  components: {ProgressCircle, ProgressBar},
   data() {
     return {
       playUrl: '',
@@ -148,6 +151,9 @@ export default {
     },
     onProgressBarChange(percent) {
       this.$refs.audio.currentTime = percent * this.currentSong.duration;
+      if (!this.playing) {
+        this.togglePlaying();
+      }
     },
     togglePlaying() {
       if (!this.songReady) {
@@ -500,6 +506,17 @@ export default {
     > .control {
       font-size: 24px;
       padding-right: 20px;
+      
+      .icon {
+        color: rgba(26, 115, 232, 0.4);
+      }
+      
+      .icon-mini {
+        font-size: 32px;
+        position: absolute;
+        left: 0;
+        top: -9px;
+      }
     }
   }
 }
