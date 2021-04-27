@@ -78,7 +78,12 @@
         </div>
       </div>
     </transition>
-    <audio ref="audio" :src="playUrl" @canplay="ready" @error="error" @timeupdate="updateTime"></audio>
+    <audio ref="audio" :src="playUrl"
+           @canplay="ready"
+           @error="error"
+           @timeupdate="updateTime"
+           @ended="end"
+    ></audio>
   </div>
 </template>
 
@@ -146,6 +151,17 @@ export default {
       }
       this.resetCurrentIndex(list);
       this.setPlayList(list);
+    },
+    end() {
+      if (this.mode === playMode.loop) {
+        this.loop();
+      } else {
+        this.next();
+      }
+    },
+    loop() {
+      this.$refs.audio.currentTime = 0;
+      this.$refs.audio.play();
     },
     prev() {
       if (!this.songReady) {
