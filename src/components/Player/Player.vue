@@ -90,6 +90,7 @@ import ProgressBar from '@/common/ProgressBar/ProgressBar';
 import ProgressCircle from '@/common/ProgressCircle/ProgressCircle';
 import {Icon} from 'ant-design-vue';
 import {playMode} from '@/common/JS/config';
+import {shuffle} from '@/common/JS/util';
 
 const MyIcon = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_2515644_3ako6wjxbn.js', // 在 iconfont.cn 上生成
@@ -111,7 +112,8 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['playList', 'fullscreen', 'currentSong', 'playing', 'currentIndex', 'mode']),
+    ...mapGetters(['playList', 'fullscreen', 'currentSong', 'playing', 'currentIndex', 'mode',
+      'sequenceList']),
     albumImgUrl() {
       return `https://y.gtimg.cn/music/photo_new/T002R300x300M000${this.currentSong.albumID}.jpg`;
     },
@@ -136,6 +138,14 @@ export default {
     changeMode() {
       const mode = (this.mode + 1) % 3;
       this.setPlayMode(mode);
+      let list = null;
+      if (mode === this.mode.random) {
+        list = shuffle(this.sequenceList);
+      } else {
+        list = this.sequenceList;
+      }
+      this.resetCurrentIndex(list);
+      this.setPlayList(list);
     },
     prev() {
       if (!this.songReady) {
@@ -201,6 +211,12 @@ export default {
       }
       return num;
     },
+    resetCurrentIndex(list) {
+      let index = list.findIndex((item) => {
+        return item.id === this.currentSong.id;
+      });
+      this.setCurrentIndex(index);
+    },
     enter(el, done) {
       const {x, y, scale} = this._getPosAndScale();
       let animation = {
@@ -259,12 +275,16 @@ export default {
       setFullscreen: 'SET_FULL_SCREEN',
       setPlayingState: 'SET_PLAYING_STATE',
       setCurrentIndex: 'SET_CURRENT_INDEX',
-      setPlayMode: 'SET_PLAY_MODE'
+      setPlayMode: 'SET_PLAY_MODE',
+      setPlayList: 'SET_PLAY_LIST',
     })
   },
   watch: {
-    async currentSong(value) {
-      this.playUrl = await this.fetchSongUrl(value.songPlayID);
+    async currentSong(newSong, oldSong) {
+      if (newSong.id === oldSong.id) {
+        return;
+      }
+      this.playUrl = await this.fetchSongUrl(newSong.songPlayID);
     },
     playUrl() {
       this.$nextTick(() => {
