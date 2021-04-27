@@ -14,6 +14,7 @@ Vue.component(Spin.name, Spin);
 Vue.component(Icon.name, Icon);
 Vue.component(Progress.name, Progress);
 
+
 Vue.config.productionTip = false;
 
 // axios

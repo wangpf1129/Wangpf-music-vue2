@@ -39,19 +39,19 @@
           </div>
           <div class="operators">
           <span class="icon-list">
-            <a-icon type="rollback"/>
+            <my-icon type="icon-sequence"/>
           </span>
             <span class="icon-prev" @click="prev">
-            <a-icon type="backward" theme="filled"/>
+             <my-icon type="icon-prev"/>
           </span>
             <span class="icon-play" @click="togglePlaying">
-            <a-icon :type="playIcon"/>
+            <my-icon :type="playIcon"/>
           </span>
             <span class="icon-next" @click="next">
-            <a-icon type="forward" theme="filled"/>
+             <my-icon type="icon-next"/>
           </span>
             <span class="icon-favorite">
-            <a-icon type="heart"/>
+            <my-icon type="icon-heart"/>
           </span>
           </div>
         </div>
@@ -69,12 +69,12 @@
         <div class="control">
           <progress-circle :radius="32" :percent="percent">
             <span :class="['icon-play','icon-mini']" @click.stop="togglePlaying">
-            <a-icon class="icon" theme="filled" :type="playIcon"/>
+              <my-icon :type="playIcon"/>
           </span>
           </progress-circle>
         </div>
         <div class="control">
-          <a-icon class="icon" type="pic-center"/>
+          <my-icon type="icon-list"/>
         </div>
       </div>
     </transition>
@@ -88,11 +88,19 @@ import animations from 'create-keyframe-animation';
 import {prefixStyle} from '@/common/JS/dom';
 import ProgressBar from '@/common/ProgressBar/ProgressBar';
 import ProgressCircle from '@/common/ProgressCircle/ProgressCircle';
+import {Icon} from 'ant-design-vue';
+
+const MyIcon = Icon.createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/font_2515644_3ako6wjxbn.js', // 在 iconfont.cn 上生成
+  extraCommonProps: {
+    class: 'my-icon'
+  }
+});
 
 const transform = prefixStyle('transform');
 export default {
   name: 'Player',
-  components: {ProgressCircle, ProgressBar},
+  components: {ProgressCircle, ProgressBar, MyIcon},
   data() {
     return {
       playUrl: '',
@@ -107,7 +115,7 @@ export default {
       return `https://y.gtimg.cn/music/photo_new/T002R300x300M000${this.currentSong.albumID}.jpg`;
     },
     playIcon() {
-      return this.playing ? 'pause-circle' : 'play-circle';
+      return this.playing ? 'icon-pause' : 'icon-play';
     },
     cdClass() {
       return this.playing ? 'play-fade' : 'play-fade pause-fade';
@@ -269,6 +277,10 @@ export default {
 <style lang="scss" scoped>
 .player-wrapper {
   display: flex;
+  
+  .my-icon {
+    font-size: 38px;
+  }
   
   .normal-enter-active, .normal-leave-active {
     transition: all .4s;
@@ -514,8 +526,8 @@ export default {
       .icon-mini {
         font-size: 32px;
         position: absolute;
-        left: 0;
-        top: -9px;
+        left: -3px;
+        top: -7px;
       }
     }
   }
