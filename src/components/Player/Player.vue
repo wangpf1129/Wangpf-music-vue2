@@ -144,7 +144,7 @@ export default {
       const mode = (this.mode + 1) % 3;
       this.setPlayMode(mode);
       let list = null;
-      if (mode === this.mode.random) {
+      if (mode === playMode.random) {
         list = shuffle(this.sequenceList);
       } else {
         list = this.sequenceList;

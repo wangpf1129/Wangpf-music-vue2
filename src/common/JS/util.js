@@ -4,11 +4,12 @@ function getRandomInt(min, max) {
 
 // 打乱数组， （随机）
 export function shuffle(arr) {
+  let _arr = arr.slice();
   for (let i = 0; i < arr.length; i++) {
     let j = getRandomInt(0, i);
-    let temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
+    let temp = _arr[i];
+    _arr[i] = _arr[j];
+    _arr[j] = temp;
   }
-  return arr;
+  return _arr;
 }
