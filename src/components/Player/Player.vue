@@ -38,8 +38,8 @@
             <span>{{ formatTime(currentSong.duration) }}</span>
           </div>
           <div class="operators">
-          <span class="icon-list">
-            <my-icon type="icon-sequence"/>
+          <span class="icon-list" @click="changeMode">
+            <my-icon :type="iconMode"/>
           </span>
             <span class="icon-prev" @click="prev">
              <my-icon type="icon-prev"/>
@@ -89,6 +89,7 @@ import {prefixStyle} from '@/common/JS/dom';
 import ProgressBar from '@/common/ProgressBar/ProgressBar';
 import ProgressCircle from '@/common/ProgressCircle/ProgressCircle';
 import {Icon} from 'ant-design-vue';
+import {playMode} from '@/common/JS/config';
 
 const MyIcon = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_2515644_3ako6wjxbn.js', // 在 iconfont.cn 上生成
@@ -110,7 +111,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['playList', 'fullscreen', 'currentSong', 'playing', 'currentIndex']),
+    ...mapGetters(['playList', 'fullscreen', 'currentSong', 'playing', 'currentIndex', 'mode']),
     albumImgUrl() {
       return `https://y.gtimg.cn/music/photo_new/T002R300x300M000${this.currentSong.albumID}.jpg`;
     },
@@ -119,6 +120,10 @@ export default {
     },
     cdClass() {
       return this.playing ? 'play-fade' : 'play-fade pause-fade';
+    },
+    iconMode() {
+      return this.mode === playMode.sequence ? 'icon-sequence' :
+        this.mode === playMode.loop ? 'icon-loop' : 'icon-random';
     }
   },
   methods: {
@@ -127,6 +132,10 @@ export default {
     },
     open() {
       this.setFullscreen(true);
+    },
+    changeMode() {
+      const mode = (this.mode + 1) % 3;
+      this.setPlayMode(mode);
     },
     prev() {
       if (!this.songReady) {
@@ -249,7 +258,8 @@ export default {
     ...mapMutations({
       setFullscreen: 'SET_FULL_SCREEN',
       setPlayingState: 'SET_PLAYING_STATE',
-      setCurrentIndex: 'SET_CURRENT_INDEX'
+      setCurrentIndex: 'SET_CURRENT_INDEX',
+      setPlayMode: 'SET_PLAY_MODE'
     })
   },
   watch: {
