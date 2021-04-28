@@ -28,7 +28,7 @@
               </div>
             </div>
           </div>
-          <div class="middle-r" ref="lyricList">
+          <Scroll class="middle-r" ref="lyricList" :list="currentLyric && currentLyric.lines">
             <div class="lyric-wrapper">
               <div v-if="currentLyric">
                 <p class="text" ref="lyricLine"
@@ -40,7 +40,7 @@
                 </p>
               </div>
             </div>
-          </div>
+          </Scroll>
         </div>
         <div class="bottom">
           <div class="progress-bar">
@@ -106,6 +106,7 @@ import animations from 'create-keyframe-animation';
 import {prefixStyle} from '@/common/JS/dom';
 import ProgressBar from '@/common/ProgressBar/ProgressBar';
 import ProgressCircle from '@/common/ProgressCircle/ProgressCircle';
+import Scroll from '@/common/Scroll';
 import {Icon} from 'ant-design-vue';
 import {playMode} from '@/common/JS/config';
 import {shuffle} from '@/common/JS/util';
@@ -121,7 +122,7 @@ const MyIcon = Icon.createFromIconfontCN({
 const transform = prefixStyle('transform');
 export default {
   name: 'Player',
-  components: {ProgressCircle, ProgressBar, MyIcon},
+  components: {ProgressCircle, ProgressBar, MyIcon, Scroll},
   data() {
     return {
       playUrl: '',
@@ -502,18 +503,19 @@ export default {
         height: 100%;
         width: 100%;
         overflow: hidden;
+        
         .lyric-wrapper {
           width: 80%;
           margin: 0 auto;
           overflow: hidden;
           text-align: center;
           
-          .text{
+          .text {
             line-height: 32px;
-            color: rgba(0,0,0,.68);
+            color: rgba(0, 0, 0, .68);
             font-size: 16px;
-  
-            &.current{
+            
+            &.current {
               color: #1a73e8;
             }
           }
