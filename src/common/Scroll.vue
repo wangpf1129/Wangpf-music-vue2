@@ -6,9 +6,11 @@
 
 <script>
 import BScroll from '@better-scroll/core';
+import {playListMixin} from '@/common/JS/mixin';
 
 export default {
   name: 'Scroll',
+  mixins:[playListMixin],
   props: {
     top: {
       type: Number,
@@ -32,7 +34,12 @@ export default {
     },
     refresh() {
       this.scroll && this.scroll.refresh();
-    }
+    },
+    // 有播放列表的时候滑动组件的底部要加bottom
+    handlePlayList(playList) {
+      this.$refs.wrapper.style.bottom = playList.length > 0 ? '70px' : '0px';
+      this.refresh();
+    },
   },
   mounted() {
     this.initScroll();
@@ -54,6 +61,5 @@ export default {
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
 }
 </style>

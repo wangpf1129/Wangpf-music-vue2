@@ -1,8 +1,8 @@
 <template>
-  <div class="recommended-wrapper">
-    <scroll :top="98" :list="recommendedSong" ref="scroll">
+  <div class="recommended-wrapper" ref="recommend">
+    <scroll :top="98" :list="recommendedSong" ref="scroll" >
       <div class="scroll-wrapper">
-        <my-swiper :swiper-list="swiperList" @img-load="scrollRefresh"/>
+        <my-swiper :swiper-list="swiperList" @img-load="scrollRefresh" class="swiper"/>
         <song-sheet-list :recommended-song="recommendedSong" @select-song-sheet="selectSongSheet"/>
         <loading v-show="recommendedSong.length === 0"></loading>
       </div>
