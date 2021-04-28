@@ -25,7 +25,7 @@
              @touchmove.prevent="middleTouchMove"
              @touchend="middleTouchEnd"
         >
-          <div class="middle-l">
+          <div class="middle-l" ref="middleLeft">
             <div class="cd-wrapper" ref="cdWrapper">
               <div class="cd" :class="cdClass">
                 <img class="image" :src="albumImgUrl" alt="">
@@ -275,27 +275,34 @@ export default {
       this.touch.percent = Math.abs(offsetWidth / window.innerWidth);
       this.$refs.lyricList.$el.style[transform] = `translate3d(${offsetWidth}px,0,0)`;
       this.$refs.lyricList.$el.style[transitionDuration] = 0;
+      this.$refs.middleLeft.style.opacity = 1 - this.touch.percent;
+      this.$refs.middleLeft.style[transitionDuration] = 0;
     },
     middleTouchEnd() {
-      let offsetWidth = 0;
+      let offsetWidth, opacity;
       if (this.currentShow === 'cd') {
         if (this.touch.percent > 0.1) {
           offsetWidth = -window.innerWidth;
           this.currentShow = 'lyric';
+          opacity = 0;
         } else {
           offsetWidth = 0;
+          opacity = 1;
         }
       } else {
         if (this.touch.percent < 0.9) {
           offsetWidth = 0;
+          opacity = 1;
           this.currentShow = 'cd';
         } else {
           offsetWidth = -window.innerWidth;
+          opacity = 0;
         }
       }
       this.$refs.lyricList.$el.style[transform] = `translate3d(${offsetWidth}px,0,0)`;
       this.$refs.lyricList.$el.style[transitionDuration] = `${300}ms`;
-      
+      this.$refs.middleLeft.style.opacity = opacity;
+      this.$refs.middleLeft.style[transitionDuration] = 0;
     },
     resetCurrentIndex(list) {
       let index = list.findIndex((item) => {
@@ -564,7 +571,7 @@ export default {
         width: 100%;
         overflow: hidden;
         position: relative;
-  
+        
         .lyric-wrapper {
           width: 80%;
           margin: 0 auto;
