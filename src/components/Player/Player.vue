@@ -20,7 +20,11 @@
             <span class="singerName">{{ currentSong.singerName }}</span>
           </div>
         </div>
-        <div class="middle">
+        <div class="middle"
+             @touchstart.prevent="middleTouchStart"
+             @touchmove.prevent="middleTouchMove"
+             @touchend="middleTouchEnd"
+        >
           <div class="middle-l">
             <div class="cd-wrapper" ref="cdWrapper">
               <div class="cd" :class="cdClass">
@@ -43,6 +47,10 @@
           </scroll>
         </div>
         <div class="bottom">
+          <div class="dot-wrapper">
+            <span class="dot" :class="{'active':currentShow === 'cd'}"></span>
+            <span class="dot" :class="{'active':currentShow === 'lyric'}"></span>
+          </div>
           <div class="progress-bar">
             <span>{{ formatTime(currentTime) }}</span>
             <div class="progress-bar-wrapper">
@@ -120,6 +128,7 @@ const MyIcon = Icon.createFromIconfontCN({
 });
 
 const transform = prefixStyle('transform');
+const transitionDuration = prefixStyle('transitionDuration');
 export default {
   name: 'Player',
   components: {ProgressCircle, ProgressBar, MyIcon, Scroll},
@@ -130,8 +139,12 @@ export default {
       currentTime: 0,
       percent: 0,
       currentLyric: null,
-      currentLineNum: 0
+      currentLineNum: 0,
+      currentShow: 'cd'
     };
+  },
+  created() {
+    this.touch = {};
   },
   computed: {
     ...mapGetters(['playList', 'fullscreen', 'currentSong', 'playing', 'currentIndex', 'mode',
@@ -244,6 +257,46 @@ export default {
       }
       return num;
     },
+    middleTouchStart(e) {
+      const touch = e.touches[0];
+      this.touch.initiated = true;
+      this.touch.startX = touch.pageX;
+      this.touch.startY = touch.pageY;
+    },
+    middleTouchMove(e) {
+      if (!this.touch.initiated) {return;}
+      const touch = e.touches[0];
+      const deltaX = touch.pageX - this.touch.startX;
+      const deltaY = touch.pageY - this.touch.startY;
+      if (Math.abs(deltaY) > Math.abs(deltaX)) {return;}// 纵坐标大于横坐标表示不是左滑右滑
+      const left = this.currentShow === 'cd' ? 0 : -window.innerWidth;
+      const offsetWidth = Math.min(0, Math.max(-window.innerWidth, left + deltaX));
+      // 滑动距离和屏幕宽度的百分比
+      this.touch.percent = Math.abs(offsetWidth / window.innerWidth);
+      this.$refs.lyricList.$el.style[transform] = `translate3d(${offsetWidth}px,0,0)`;
+      this.$refs.lyricList.$el.style[transitionDuration] = 0;
+    },
+    middleTouchEnd() {
+      let offsetWidth = 0;
+      if (this.currentShow === 'cd') {
+        if (this.touch.percent > 0.1) {
+          offsetWidth = -window.innerWidth;
+          this.currentShow = 'lyric';
+        } else {
+          offsetWidth = 0;
+        }
+      } else {
+        if (this.touch.percent < 0.9) {
+          offsetWidth = 0;
+          this.currentShow = 'cd';
+        } else {
+          offsetWidth = -window.innerWidth;
+        }
+      }
+      this.$refs.lyricList.$el.style[transform] = `translate3d(${offsetWidth}px,0,0)`;
+      this.$refs.lyricList.$el.style[transitionDuration] = `${300}ms`;
+      
+    },
     resetCurrentIndex(list) {
       let index = list.findIndex((item) => {
         return item.id === this.currentSong.id;
@@ -310,7 +363,6 @@ export default {
     },
     handleLyric({lineNum}) {
       this.currentLineNum = lineNum;
-      
       if (lineNum > 4) {
         let lineElement = this.$refs.lyricLine[lineNum - 4];
         this.$refs.lyricList.scroll.scrollToElement(lineElement, 1000);
@@ -336,6 +388,7 @@ export default {
       if (this.playing) {
         this.currentLyric.play();
       }
+      
     },
     playUrl() {
       this.$nextTick(() => {
@@ -505,12 +558,13 @@ export default {
       }
       
       .middle-r {
-        border: 1px solid red;
         display: inline-block;
+        vertical-align: top;
         height: 100%;
         width: 100%;
         overflow: hidden;
-        
+        position: relative;
+  
         .lyric-wrapper {
           width: 80%;
           margin: 0 auto;
@@ -534,6 +588,27 @@ export default {
       position: absolute;
       bottom: 40px;
       width: 100%;
+      
+      .dot-wrapper {
+        text-align: center;
+        font-size: 0;
+        
+        .dot {
+          display: inline-block;
+          vertical-align: middle;
+          margin: 0 4px;
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background-color: rgba(255, 255, 255, 0.5);
+          
+          &.active {
+            width: 20px;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.8);
+          }
+        }
+      }
       
       > .operators {
         display: flex;
