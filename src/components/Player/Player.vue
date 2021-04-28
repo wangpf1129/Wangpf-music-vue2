@@ -204,13 +204,17 @@ export default {
       if (!this.songReady) {
         return;
       }
-      let index = this.currentIndex - 1;
-      if (index === -1) {
-        index = this.playList.length;
-      }
-      this.setCurrentIndex(index);
-      if (!this.playing) {  // 如果暂停了就改变状态
-        this.togglePlaying();
+      if (this.playList.length === 1) {
+        this.loop();
+      } else {
+        let index = this.currentIndex - 1;
+        if (index === -1) {
+          index = this.playList.length;
+        }
+        this.setCurrentIndex(index);
+        if (!this.playing) {  // 如果暂停了就改变状态
+          this.togglePlaying();
+        }
       }
       this.songReady = false;
     },
@@ -218,13 +222,17 @@ export default {
       if (!this.songReady) {
         return;
       }
-      let index = this.currentIndex + 1;
-      if (index === this.playList.length - 1) {
-        index = 0;
-      }
-      this.setCurrentIndex(index);
-      if (!this.playing) {
-        this.togglePlaying();
+      if (this.playList.len === 1) {
+        this.loop();
+      } else {
+        let index = this.currentIndex + 1;
+        if (index === this.playList.length - 1) {
+          index = 0;
+        }
+        this.setCurrentIndex(index);
+        if (!this.playing) {
+          this.togglePlaying();
+        }
       }
       this.songReady = false;
       
@@ -407,9 +415,15 @@ export default {
         return;
       }
       this.playUrl = await this.fetchSongUrl(newSong.songPlayID);
-      this.currentLyric = await this.fetchLyric(newSong.songPlayID);
-      if (this.playing) {
-        this.currentLyric.play();
+      try {
+        this.currentLyric = await this.fetchLyric(newSong.songPlayID);
+        if (this.playing) {
+          this.currentLyric.play();
+        }
+      } catch (err) {
+        this.currentLyric = null;
+        this.playingLyric = '';
+        this.currentLineNum = 0;
       }
       
     },
