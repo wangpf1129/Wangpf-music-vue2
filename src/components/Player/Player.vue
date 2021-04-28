@@ -28,6 +28,19 @@
               </div>
             </div>
           </div>
+          <div class="middle-r" ref="lyricList">
+            <div class="lyric-wrapper">
+              <div v-if="currentLyric">
+                <p class="text" ref="lyricLine"
+                   :class="{'current': currentLineNum === index}"
+                   v-for="(line,index) in currentLyric.lines"
+                   :key="index"
+                >
+                  {{ line.txt }}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="bottom">
           <div class="progress-bar">
@@ -115,7 +128,8 @@ export default {
       songReady: false,  // 控制歌曲切换速度
       currentTime: 0,
       percent: 0,
-      currentLyric: null
+      currentLyric: null,
+      currentLineNum: 0
     };
   },
   computed: {
@@ -291,7 +305,10 @@ export default {
     },
     async fetchLyric(songmid) {
       const res = await this.$http.get('/lyric', {params: {songmid}});
-      return new Lyric(res.data.data.lyric);
+      return new Lyric(res.data.data.lyric, this.handleLyric);
+    },
+    handleLyric({lineNum}) {
+      this.currentLineNum = lineNum;
     },
     ...mapMutations({
       setFullscreen: 'SET_FULL_SCREEN',
@@ -308,7 +325,9 @@ export default {
       }
       this.playUrl = await this.fetchSongUrl(newSong.songPlayID);
       this.currentLyric = await this.fetchLyric(newSong.songPlayID);
-      console.log(this.currentLyric);
+      if (this.playing) {
+        this.currentLyric.play();
+      }
     },
     playUrl() {
       this.$nextTick(() => {
@@ -472,6 +491,30 @@ export default {
               width: 100%;
               height: 100%;
               border-radius: 50%;
+            }
+          }
+        }
+      }
+      
+      .middle-r {
+        border: 1px solid red;
+        display: inline-block;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+        .lyric-wrapper {
+          width: 80%;
+          margin: 0 auto;
+          overflow: hidden;
+          text-align: center;
+          
+          .text{
+            line-height: 32px;
+            color: rgba(0,0,0,.68);
+            font-size: 16px;
+  
+            &.current{
+              color: #1a73e8;
             }
           }
         }
