@@ -28,7 +28,7 @@
               </div>
             </div>
           </div>
-          <Scroll class="middle-r" ref="lyricList" :list="currentLyric && currentLyric.lines">
+          <scroll class="middle-r" ref="lyricList" :list="currentLyric && currentLyric.lines">
             <div class="lyric-wrapper">
               <div v-if="currentLyric">
                 <p class="text" ref="lyricLine"
@@ -40,7 +40,7 @@
                 </p>
               </div>
             </div>
-          </Scroll>
+          </scroll>
         </div>
         <div class="bottom">
           <div class="progress-bar">
@@ -310,6 +310,13 @@ export default {
     },
     handleLyric({lineNum}) {
       this.currentLineNum = lineNum;
+      
+      if (lineNum > 4) {
+        let lineElement = this.$refs.lyricLine[lineNum - 4];
+        this.$refs.lyricList.scroll.scrollToElement(lineElement, 1000);
+      } else {
+        this.$refs.lyricList.scroll.scrollTo(0, 0, 1000);
+      }
     },
     ...mapMutations({
       setFullscreen: 'SET_FULL_SCREEN',
