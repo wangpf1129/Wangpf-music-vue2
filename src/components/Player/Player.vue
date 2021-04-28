@@ -31,6 +31,9 @@
                 <img class="image" :src="albumImgUrl" alt="">
               </div>
             </div>
+            <div class="playing-lyric-wrapper">
+              <div class="playing-lyric">{{ playingLyric }}</div>
+            </div>
           </div>
           <scroll class="middle-r" ref="lyricList" :list="currentLyric && currentLyric.lines">
             <div class="lyric-wrapper">
@@ -140,7 +143,8 @@ export default {
       percent: 0,
       currentLyric: null,
       currentLineNum: 0,
-      currentShow: 'cd'
+      currentShow: 'cd',
+      playingLyric: '',
     };
   },
   created() {
@@ -192,6 +196,9 @@ export default {
     loop() {
       this.$refs.audio.currentTime = 0;
       this.$refs.audio.play();
+      if (this.currentLyric) {
+        this.currentLyric.seek(0);
+      }
     },
     prev() {
       if (!this.songReady) {
@@ -223,9 +230,13 @@ export default {
       
     },
     onProgressBarChange(percent) {
-      this.$refs.audio.currentTime = percent * this.currentSong.duration;
+      const currentTime = percent * this.currentSong.duration;
+      this.$refs.audio.currentTime = currentTime;
       if (!this.playing) {
         this.togglePlaying();
+      }
+      if (this.currentLyric) {
+        this.currentLyric.seek(currentTime * 1000);
       }
     },
     togglePlaying() {
@@ -233,6 +244,9 @@ export default {
         return;
       }
       this.setPlayingState(!this.playing);
+      if (this.currentLyric) {
+        this.currentLyric.togglePlay();
+      }
     },
     ready() {
       this.songReady = true;
@@ -300,9 +314,10 @@ export default {
         }
       }
       this.$refs.lyricList.$el.style[transform] = `translate3d(${offsetWidth}px,0,0)`;
-      this.$refs.lyricList.$el.style[transitionDuration] = `${300}ms`;
+      const time = 300;
+      this.$refs.lyricList.$el.style[transitionDuration] = `${time}ms`;
       this.$refs.middleLeft.style.opacity = opacity;
-      this.$refs.middleLeft.style[transitionDuration] = 0;
+      this.$refs.middleLeft.style[transitionDuration] = `${time}ms`;
     },
     resetCurrentIndex(list) {
       let index = list.findIndex((item) => {
@@ -368,7 +383,7 @@ export default {
       const res = await this.$http.get('/lyric', {params: {songmid}});
       return new Lyric(res.data.data.lyric, this.handleLyric);
     },
-    handleLyric({lineNum}) {
+    handleLyric({lineNum, txt}) {
       this.currentLineNum = lineNum;
       if (lineNum > 4) {
         let lineElement = this.$refs.lyricLine[lineNum - 4];
@@ -376,6 +391,7 @@ export default {
       } else {
         this.$refs.lyricList.scroll.scrollTo(0, 0, 1000);
       }
+      this.playingLyric = txt;
     },
     ...mapMutations({
       setFullscreen: 'SET_FULL_SCREEN',
@@ -399,6 +415,9 @@ export default {
     },
     playUrl() {
       this.$nextTick(() => {
+        if (this.currentLyric) {
+          this.currentLyric.stop();
+        }
         this.$refs.audio.play();
       });
     },
@@ -560,6 +579,21 @@ export default {
               height: 100%;
               border-radius: 50%;
             }
+          }
+        }
+        
+        > .playing-lyric-wrapper {
+          width: 80%;
+          margin: 30px auto 0 auto;
+          overflow: hidden;
+          text-align: center;
+          
+          .playing-lyric {
+            
+            height: 20px;
+            line-height: 20px;
+            font-size: 16px;
+            color: #1a73e8;
           }
         }
       }
