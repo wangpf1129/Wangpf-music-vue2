@@ -96,6 +96,7 @@ import ProgressCircle from '@/common/ProgressCircle/ProgressCircle';
 import {Icon} from 'ant-design-vue';
 import {playMode} from '@/common/JS/config';
 import {shuffle} from '@/common/JS/util';
+import Lyric from 'lyric-parser';
 
 const MyIcon = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_2515644_3ako6wjxbn.js', // 在 iconfont.cn 上生成
@@ -113,7 +114,8 @@ export default {
       playUrl: '',
       songReady: false,  // 控制歌曲切换速度
       currentTime: 0,
-      percent: 0
+      percent: 0,
+      currentLyric: null
     };
   },
   computed: {
@@ -287,6 +289,10 @@ export default {
       const res = await this.$http.get('/song/urls', {params: {id}});
       return res.data.data[id];
     },
+    async fetchLyric(songmid) {
+      const res = await this.$http.get('/lyric', {params: {songmid}});
+      return new Lyric(res.data.data.lyric);
+    },
     ...mapMutations({
       setFullscreen: 'SET_FULL_SCREEN',
       setPlayingState: 'SET_PLAYING_STATE',
@@ -301,6 +307,8 @@ export default {
         return;
       }
       this.playUrl = await this.fetchSongUrl(newSong.songPlayID);
+      this.currentLyric = await this.fetchLyric(newSong.songPlayID);
+      console.log(this.currentLyric);
     },
     playUrl() {
       this.$nextTick(() => {
